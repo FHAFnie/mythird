@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= msg %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+
+    <%-  include("header",{title:"首页"}) %>
+    <h1><%= title %></h1>
+    <h1><%= msg %></h1>
+    <h3><%= word %> </h3>
+    <p>Welcome to <%= title %></p>
+
+    <h4> <%= names %> </h4>
+    <div>
+      <%- tag%>
+    </div>
+    <h2> <%- feel %> </h2>
+<!-- 
+    <%- 'hahahaha' %>
+    这是注释的内容  
+    readme -->
+
+    <%# 这是ejs 内容注释   %>
+    <p> <%%  </p>
+    <p> %>%  </p>
+
+    <%-  flag ?  '<h2>Are you ok?</h2>':'<h4>get it</h4>' %>
+
+   <% if(!username){  %>
+        <button>注销</button>
+   <% }else{  %>
+       <button>登陆</button>
+       <button>注册</button>
+   <% }  %>
+
+  <% arr.forEach((item,index)=>{  %>
+      <h3><%-item %> --- <%- index %> </h3>
+   <% })  %>
+
+   <%- include('footer') %>
+   <%- include footer %>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>login</title>
+    <style>
+        label{
+            display: block;
+        }
+        .hide{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h3>register - register - 马上注册 </h3>
+        <form  action="/register" method="POST" >
+            <label for="usernamecpt">
+                <input placeholder="请输入用户名" type="text" id="usernamecpt" name="username">
+            </label>
+            <label for="nicknamecpt">
+                <input placeholder="请输入昵称" type="text" id="nicknamecpt" name="nickname">
+            </label>
+            <label for="passwordcpt">
+                <input placeholder="请输入密码" type="password" id="passwordcpt" name="password">
+            </label>
+            <label for="dbpasswordcpt">
+                <input placeholder="请输入确认密码" type="password" id="dbpasswordcpt" name="dbpassword">
+            </label>
+            <label >
+                <input  type="submit" value="注册" >
+            </label>
+        </form>
+    </div>
+</body>
+</html>

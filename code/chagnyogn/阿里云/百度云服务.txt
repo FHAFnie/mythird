@@ -1,0 +1,17 @@
+主机临时域名：xiu16.gz01.bdysite.com；
+独立控制面板：login.bcehost.com；
+主机管理账号：xiu16；
+主机管理密码：p6wyrcp8；
+FTP地址：xiu16.ftp-gz01.bcehost.com；
+FTP端口号：8010；
+FTP登录账号：xiu16；
+FTP密码：yymekrj5；
+MySQL连接地址：sqld-gz.bcehost.com；
+MySQL端口号：3306；
+MySQL数据库名：AdcZIhWvVzkITBWcAqSI；
+MySQL账号：1d908d1d51b0401c8c8a9de28f26c376；
+MySQL密码：a29f11b8233b4d909a373c2526262738；
+PHPMyAdmin访问地址：http://sma-gz.bcehost.com/pmap/jump?db=AdcZIhWvVzkITBWcAqSI&expires=1541144300&sign=a90e51f0e7902a33d6bdb4685e2f95ff&client_id=1d908d1d51b0401c8c8a9de28f26c376；
+管理联系人：fhafnie；
+管理联系人手机号：181*****571；
+管理联系人邮箱：28******7@qq.com；

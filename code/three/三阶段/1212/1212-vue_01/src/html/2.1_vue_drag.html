@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title  >vue</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        .box{
+            position: absolute;
+            top:0;
+            left:100px;
+            width:100px;
+            height: 100px;
+            background: orange;
+        }
+        #drag2{
+            top:200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>{{title }}</h2>
+       
+        <div class="box" id="drag2" v-drag >box02</div>
+    </div>
+    <div class="box" id="drag1">box01</div>
+    <div class="box" id="drag3">box03</div>
+    <!-- 
+  
+     -->
+    <script>
+
+        var drag1 = document.getElementById("drag1");
+        var startX = 0;
+        var startY = 0;
+        drag1.onmousedown = function(e){
+            var offsetX = drag1.offsetLeft;   // left top 根据拖拽 改变 
+            var offsetY = drag1.offsetTop;
+            e =  e || window.event;
+            startX = e.clientX - offsetX;
+            startY = e.clientY - offsetY;
+            console.log(startX);
+            document.onmousemove = function(e){
+                e =  e || window.event;
+                drag1.style.left = e.clientX - startX + "px";
+                drag1.style.top = e.clientY - startY + "px";
+            }
+
+            document.onmouseup = function(){
+                document.onmousemove = null;
+                document.onmouseup  = null;
+            }
+        }
+        // 面向对象  封装 继承 多态 (方法重载)
+        function Drag(id){  //  this == Drag 
+            this.drag = document.getElementById(id);  // 拖拽的DOM 
+            this.startX = 0;
+            this.startY = 0;
+
+            this.init = function(){
+                console.log("init == 初始化 ")
+            }
+            
+            var that = this;
+            this.drag.onmousedown = function(e){
+                console.log(this);  // this == 拖拽的对象 
+                that.fnDown(e);  
+            }
+        }
+        //  Drag.prototype 原型对象  属于 构造函数  === this == Drag 
+        Drag.prototype.fnDown = function(e){
+             e = e  || window.event;
+             console.log("onmousedown")
+             this.startX = e.clientX - this.drag.offsetLeft;
+             this.startY = e.clientY - this.drag.offsetTop;
+             var that = this;
+             document.onmousemove = function(e){
+                that.fnMove(e);
+             }
+             document.onmouseup = function(){
+                 that.fnUp();
+             }
+        }
+        Drag.prototype.fnMove = function(e){
+            e = e  || window.event;
+            this.drag.style.left = e.clientX - this.startX + 'px';
+            this.drag.style.top = e.clientY - this.startY + 'px';
+
+        }
+        Drag.prototype.fnUp = function(){
+            document.onmousemove = null;
+            document.onmouseup  = null;
+        }
+
+
+
+
+        var d3 = new Drag("drag3");
+        d3.init();
+
+
+
+
+
+         
+
+        
+
+        const vm = new Vue({
+          data:{   // data 属性 
+              title:"自定义指令  拖拽   ",
+              like:'1807 daydayup'
+          },
+          directives:{
+              drag:{
+                  bind(el,bindings){
+                    var drag1 = el;
+                    var startX = 0;
+                    var startY = 0;
+                    drag1.onmousedown = function(e){
+                        var offsetX = drag1.offsetLeft;   // left top 根据拖拽 改变 
+                        var offsetY = drag1.offsetTop;
+                        e =  e || window.event;
+                        startX = e.clientX - offsetX;
+                        startY = e.clientY - offsetY;
+                        console.log(startX);
+                        document.onmousemove = function(e){
+                            e =  e || window.event;
+                            drag1.style.left = e.clientX - startX + "px";
+                            drag1.style.top = e.clientY - startY + "px";
+                        }
+
+                        document.onmouseup = function(){
+                            document.onmousemove = null;
+                            document.onmouseup  = null;
+                        }
+                    }
+                  }
+              }
+          },
+          mounted(){
+              document.querySelector("title").innerHTML = this.title;
+
+          }
+        }).$mount("#app")
+    
+        // 指令 编写动画  
+
+    </script>
+</body>
+</html>
+
+
+

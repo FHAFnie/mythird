@@ -1,0 +1,26 @@
+<!--pages/good-detail/good-detail.wxml-->
+<view>
+ <view>
+      <text> {{ good.name }}</text>
+ </view>
+
+ <view>
+    <image  class="img" src="{{good.img}}"></image>
+ </view>
+
+ <view style="color:red">
+    价格 ： {{good.price}}   -  折扣  {{good.discount}}  - 分类 {{good.type&&good.type.text}}
+ </view>
+
+ <view>
+      <button type="warn" size="mini" bindtap="desc">-</button>
+      <input class="inp" type="number" value="{{count}}" bindinput="setCount" />
+      <button type="warn" size="mini" bindtap="add">+</button>
+ </view>
+
+ <view class="action">
+      <button type="primary" bindtap="addCar">加入购物车</button>
+      <button type="warn" bindtap="gotocar">立即购买 </button>
+ </view>
+
+</view>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue-router</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+    <style>
+        .views{
+            border:2px solid red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h3>{{msg}}</h3>
+        <c-head></c-head>
+        <router-link to="/home">首页</router-link>
+        <router-link to="/news">新闻</router-link>
+        <router-link to="/my">我的</router-link>
+        <!-- 6 页面导航 to 属性   -->
+        <hr>
+        <!-- 5 路由出口  路由匹配到的组件将渲染在这里  -->
+        <router-view class="views"></router-view> 
+    </div>
+    <!-- 
+        vue-router 实现单页面应用 
+
+        路由池注册对应的路由选项 (path,component) 
+
+        url 切换 匹配不同的路由选项  加载对应路由组件和渲染数据 
+
+        将组件 (components) 映射到路由 (routes)，然后告诉 Vue Router 在哪里渲染它们
+     -->
+    <script>
+        // 0. 如果使用模块化机制编程，导入Vue和VueRouter，要调用 Vue.use(VueRouter)
+        
+        // 1. 定义路由组件
+        const Home = {template:"<h2>this is my home page ! </h2>"}
+        const News = {template:"<h2>this is hot New page ! </h2>"}
+        const My = {template:"<h2>this is My pretty page ! </h2>"}
+        const Head = {template:"<h2>this is head component ! </h2>"}
+        Vue.component("c-head",Head);
+         
+         // 2. 定义路由 routes 路由配置 path,component
+         const routes = [
+            {path:"",component:Home},
+            {path:"/home",component:Home},
+            {path:"/news",component:News},
+            {path:"/my",component:My},
+            {path:"*",component:{
+                template:"<h2>not Found 404 - 404</h2>"
+            }}
+         ]
+        // 3. 创建 router 实例，然后传 `routes` 配置
+        var router = new VueRouter({
+            routes
+        })
+
+        // 4 挂载到根实例 
+        const vm = new Vue({
+            el:"#app",
+            router,
+            data:{
+                msg:"vue-router "
+            }
+        })
+    </script>
+</body>
+</html>

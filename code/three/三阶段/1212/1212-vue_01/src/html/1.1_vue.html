@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h2 v-bind:data-id="id">{{ txt }}---{{id}}</h2>
+        <h2 v-if="flag" v-bind:data-msg="'if'">{{ txt }}---{{id}} --{{flag}}</h2>
+        <h2 v-on:click="flag=!flag" v-show="flag" v-bind:data-msg="'show'">{{ txt }}---{{id}} --{{flag}}</h2>
+        <button v-on:click = "reverse( 'vue' )" >翻转  txt </button>
+        <button @click="countAdd(10)">id add </button>
+
+        <div>
+            <p v-for="(todo,index) in todos ">{{todo.text}}---{{index}}</p>
+        </div>
+
+        <div>
+            <h3>数据双向绑定  </h3>
+            <input type="text" v-model="inp" >
+            <h3>{{inp }}</h3>
+
+            <h2> No v-model </h2>
+            <input type="text" :value="msg" v-on:input="getMsg($event)" >
+            <h2>{{msg}}</h2>
+
+
+        </div>
+    </div>
+    <!--
+        v-bind 绑定属性  缩写  v-bind:src =  :src
+        v-if   显示隐藏     隐藏  就直接 移除元素
+        v-show  显示隐藏    隐藏  样式隐藏
+        v-on 绑定事件  @  @click
+        methods 所有元素的方法事件
+
+        v-for 遍历数据
+
+        v-model  重要  实现数据双向绑定
+        view 视图       和    data  数据模型 model
+        1. 修改视图  更新 数据 model
+        2. 修改数据  更新 视图  views
+
+
+
+     -->
+    <script>
+        const vm = new Vue({
+            el:"#app",
+            data:{
+                txt:"Are you ok?",
+                id:2018,
+                flag:true,
+                todos: [
+                    { text: '学习 JavaScript' },
+                    { text: '学习 Vue' },
+                    { text: '整个牛项目' }
+                ]  ,
+                inp:"1807",
+                msg:"hello 1807"
+            },
+            methods:{
+                reverse(m){
+                    console.log(m);
+                    this.txt = this.txt.split("").reverse().join("");
+
+                },
+                countAdd(n){
+                    this.id += n;
+                },
+                getMsg(e){
+                    console.log(e);
+                    this.msg = e.target.value ; // 修改视图  改变 data
+                }
+            }
+        })
+    </script>
+</body>
+</html>

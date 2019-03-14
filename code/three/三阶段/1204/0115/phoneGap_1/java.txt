@@ -1,0 +1,19 @@
+1.安装java sdk
+
+2.把对应的路径依赖的全局系统变量去
+
+3.JAVA_HOME    就是你的java的安装目录 
+  C:\Program Files (x86)\Java\jdk1.8.0_91
+
+4.CLASSPATH    .;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;
+
+5.path 系统变量
+%JAVA_HOME%\bin;
+
+6. java -version
+
+phoneGap 中文网
+http://www.phonegapcn.com/docs/zh/cn/index.html
+
+
+

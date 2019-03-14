@@ -1,0 +1,23 @@
+<!--components/good-cpt/good-cpt.wxml-->
+<view class="goods-box">
+    <scroll-view 
+    class="scroll"
+    scroll-y
+    bindscrolltoupper="upper"
+    bindscrolltolower="lower"
+    bindscroll="scroll"
+    >
+        <view>
+            <view wx:for="{{mydata}}" wx:key="index">
+                <navigator
+                 url="{{'../good-detail/good-detail?goodId='+ item._id }}"
+                >
+                    <image src="{{item.img}}"></image>
+                    <view>
+                        {{item.name}}--- RMB {{item.price}}
+                    </view>
+                </navigator>
+            </view>
+        </view>
+    </scroll-view> 
+</view>

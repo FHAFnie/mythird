@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title  >vue</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        .static{
+            width:200px;
+            height:200px;
+            background: yellowgreen;
+        }
+        .a{
+            border-radius: 50%;
+        }
+        .b{
+            border:5px solid darkblue;
+        }
+        #tab{
+            height:54px;
+        }
+        #tab b{
+            width:100px;
+            height:50px;
+            text-align: center;
+            line-height: 50px;
+            color:#000;
+            float:left;
+            
+            background: #e4e4e4;
+        }
+        #tab b.active{
+            color:blue;
+            border-bottom:4px solid blue;
+        }
+        #content p{
+            width:320px;
+            height:320px;
+            display: none;
+            background: yellowgreen;
+            color:red;
+            font-size:50px;
+            text-align: center;
+            line-height: 320px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>{{title }}</h2>
+        <div class="static" v-bind:class="isA"></div>
+        <div class="static" v-bind:class="{ b:isB  }"></div>
+        <div class="static" :class="[isA,isBBB]"></div>
+        <div class="static" :class="{a:!isB,b:isB}"></div>
+
+        <div class="static" v-bind:style="{backgroundColor:'yellow','border-radius':'30%',border:'2px solid darkblue'}"></div>
+        <div class="static" :style="style"></div>
+        <div class="static" :style="[style,styleObj]"></div>
+
+        <div>
+            <div id="tab">
+                <b :class="{active:tabId==0}" @click="tabId=0">tab01</b>
+                <b :class="{active:tabId==1}" @click="tabId=1">tab02</b>
+                <b :class="{active:tabId==2}" @click="tabId=2">tab03</b>
+            </div>
+            <div id="content">
+                <p :style="{display:tabId==0?'block':'none'}">content01</p>
+                <p :style="{display:tabId==1?'block':'none'}">content02</p>
+                <p :style="{display:tabId==2?'block':'none'}">content03</p>
+            </div>
+        </div>
+    </div>
+    <!-- 
+       v-bind:class = "isA"
+       v-bind:class = "{b:isB}"
+
+       :style = {}   
+     -->
+    <script>
+
+        const vm = new Vue({
+          data:{   // data 属性 
+              title:"style && class  ",
+              isA:' a',
+              isB: true ,
+              isBBB:"b",
+              flagA:true,
+              style:{
+                  background:"red",
+                  'border-radius':'50%'
+              },
+              styleObj:{
+                  "border":"4px solid #000"
+              },
+              tabId:0
+             
+          },
+
+          mounted(){
+              document.querySelector("title").innerHTML = this.title;
+
+          }
+        }).$mount("#app")
+
+
+
+    </script>
+</body>
+</html>

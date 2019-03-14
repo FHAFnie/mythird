@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue </title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h2> {{ msg }} </h2>
+        <h4>{{title }}</h4>
+        <h2 v-bind:data-id="id" v-on:click="id++">{{word }}---{{id}}</h2>
+    </div>
+
+    <div id="demo">
+        <h3>{{msg}}</h3>
+        <h4>{{word}}</h4>
+    </div>
+
+    <script>
+        console.log(Vue);   // Vue 构造函数 
+
+        //  实例化 Vue 生成 vue 实例 vm 
+        // vm 其实 就是 把  dom 和  data(model 数据模型) 绑定在一起 
+        // el 就是 vue 挂载的 元素  根元素 
+        // data  就是 Vue 属性  表示 数据 
+        // {{ }}  双大括号语法  插值表达式  模板语法
+        // v-bind 绑定属性  attr  v-bind:src v-bind:href   指令   
+        // v-on   绑定事件  v-on:input 
+        // v-if 
+
+        // 响应式数据系统  
+        const word = "Vue.js 的核心是一个允许采用简洁的模板语法来声明式地将数据渲染进 DOM 的系统"
+        var vm = new Vue({
+            el:"#app",  // vue 挂载的 元素  根元素 
+            data:{   // 
+                msg:"hello vue",
+                title:"1807 fighting",
+                word,
+                id:1807
+            }
+        })
+
+
+        function Demo(options){
+            this.options = options;
+            this.ele =  document.querySelector(this.options.el);
+            console.log(this.ele);
+            this.data = this.options.data;
+            console.log(this.data);
+            
+            var innerHTML = this.ele.innerHTML;
+            console.log(innerHTML)
+            for(var i in this.data){
+                console.log(i)
+
+                var key = i;
+                var reg  = new RegExp("{{"+key+"}}","gi");
+                // innerHTML= innerHTML.replace(/[ ]|[&nbsp;]/gi, '')
+                console.log(innerHTML)
+                innerHTML = innerHTML.replace(reg,this.data[i]);
+            }
+            
+            this.ele.innerHTML = innerHTML;
+
+        }
+
+        // Demo.prototype = Object.assign({},Demo.prototype,...this.data);
+        
+
+
+        var demo = new Demo({
+            el:"#demo",
+            data:{
+                msg:"hello demo",
+                word:"I am fine"
+            }
+        })
+
+        console.log(demo.data);
+    </script>
+</body>
+</html>

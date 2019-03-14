@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <script src="http://112.74.49.124/base/js/jquery-1.11.3.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+    </script>
+    <style>
+    	.content{
+    		padding:50px 10px;
+    		box-sizing: border-box;
+    		width: 100%;
+    	}
+
+    	.box{
+    		width:100%;
+    		height:50vh;
+    		margin-bottom: 10px;
+    		border:3px dotted darkgreen
+    		color:red;
+    		font-size: 24px;
+    		line-height: 32px;
+    		text-align: center;
+    	}
+
+    	#map{
+    		width:96%;
+    		height:150vh;
+    		border:2px solid darkblue;
+    		margin:50px auto;
+    	}
+    	table{
+			width:100%;
+			margin-top: 10px;
+			box-sizing: border-box;
+		}
+		table td{
+			border:1px solid #000;
+			height:50px;
+			text-align: center;
+		}
+		tr td:nth-child(1){
+			width:15%;
+		}
+		tr td:nth-child(2){
+			width:25% !important;
+		}
+		tr td:nth-child(3){
+			width:26% !important;
+		}
+		tr td:nth-child(4){
+			width:17% !important;
+		}
+		tr td:nth-child(5){
+			width:17% !important;
+		}
+
+
+    </style>
+
+    <script>
+
+    	// 获取手机通讯录
+    	function getContact(){
+    		plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE,
+    			(addressbook)=>{
+    				addressbook.find(["displayName","phoneNumbers"],
+    					(contacts)=>{
+    						console.log(JSON.stringify(contacts))
+    						alert(contacts.length)
+    						var body = document.getElementById("body");
+    						body.innerHTML = "";
+    						contacts.forEach((item,index)=>{
+    							if(item.phoneNumbers[0]){
+    								var phoneNumber = item.phoneNumbers[0].value;
+    								//数据格式不正确，会报错
+    								if(phoneNumber.indexOf(" ")!=-1){
+    									phoneNumber=phoneNumber.split(" ").join("");
+    								}
+    								var displayName = item.displayName;
+    								
+    								var oTr = document.createElement("tr");
+    								oTr.innerHTML = "<td>"+(index+1)+"</td>";
+    								oTr.innerHTML += "<td>"+(displayName)+"</td>";
+    								oTr.innerHTML += "<td>"+(phoneNumber)+"</td>";
+    								oTr.innerHTML += "<td><button class='mui-btn mui-btn-royal'>修改</button></td>";
+    								oTr.innerHTML += "<td><button onclick='delContact("+phoneNumber+",this)' data-phone="+phoneNumber+"  class='mui-btn mui-btn-danger'>删除</button></td>";
+
+    								body.appendChild(oTr);
+
+    							}
+    						})
+    					},
+    					()=>{
+    						alert("error");
+    					},
+    					{multiple:true}
+    				)
+    			},
+    			(e)=>{
+    				alert("Get address book failed: " + e.message);
+    			}
+    		)
+    	}
+
+    	function delContact(mobile,that){
+
+    		var phone = that.getAttribute("data-phone");
+    		alert(phone);
+
+    		plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE,
+    			(addressbook)=>{
+    				var contact = 	addressbook.find(null,
+    					(contacts)=>{
+    						if(contacts.length>0){
+    							var dc = contacts[0];
+    							dc.remove(()=>{
+    								getContact();
+    								alert( "Remove "+dc.displayName+" success!"   );
+    							})
+    						}
+    					},
+    					(e)=>{
+    						alert( "get 联系人  error: "+e.message );
+    					},
+    					{filter:[{logic:"or",field:"phoneNumbers",value:phone}],multi:false}
+    				)
+    			},
+    			(e)=>{
+    				alert( "get 通讯录 error: "+e.message );
+    			}
+    		)
+    	}
+
+    	function updateContact(){
+
+    	}
+
+    	function addContact(){
+    		var fullname = document.getElementById("fullname").value;
+    		var mobile = document.getElementById("mobile").value;
+//  		alert(fullname+"----"+mobile);
+    		plus.contacts.getAddressBook( plus.contacts.ADDRESSBOOK_PHONE, function( addressbook ) {
+				// 向通讯录中添加联系人
+				var contact = addressbook.create();
+				contact.name = {givenName:fullname};
+				contact.phoneNumbers = [{type:"手机",value:mobile,preferred:true}];
+				contact.save(()=>{
+//					alert("添加联系人成功 ---" + fullname);
+					console.log(fullname);
+					console.log(mobile);
+//					alert(mobile);
+//					mui.ajax({
+//						type:"get",
+//						url:"http://localhost:3300/mobile/telephone",
+//						data:{
+//							phoneNumber:mobile,
+//							displayName:fullname
+//						},
+////						dataType:"json",
+//						success:function(result){
+//							alert("成功");
+//						}
+//					})
+					//ajax请求
+					mui.ajax('http://112.74.49.124:3400/mobile/telephone',{
+						data:{
+							phoneNumber:mobile,
+							displayName:fullname
+						},
+						type:'get',//HTTP请求类型              
+						success:function(data){
+							//服务器返回响应，根据响应结果，分析是否登录成功；
+							alert("成功");
+						},
+						error:function(xhr,type,errorThrown){
+							//异常处理；
+							console.log(type);
+						}
+					});
+					
+//					mui.ajax('http://47.94.208.182:3100/react/getAllContacts',{
+//						data:{
+//							username:'zuozuomu',
+//							contacts:JSON.stringify(data)
+//						},
+//						type:'get',//HTTP请求类型
+//						success:function(data){
+//							alert(data.msg);
+//						},
+//						error:function(xhr,type,errorThrown){
+//							//异常处理；
+//							console.log(type);
+//						}
+//					});
+
+				},
+				function ( e ) {
+					alert( "保存联系人失败：" + e.message );
+				});
+			}, function ( e ) {
+				alert( "Get address book failed: " + e.message );
+			} );
+
+    	}
+    </script>
+</head>
+<body>
+
+	<div class="mui-content content">
+	    <div class="mui-control-content" id="contact">
+	    	<header class="mui-bar mui-bar-nav">
+	    	    <h1 class="mui-title">手机联系人</h1>
+	    	</header>
+
+	    	<button onclick="getContact()" class="mui-btn mui-btn-block mui-btn-success">获取联系人</button>
+	    	<table>
+	    		<thead>
+	    			<tr>
+		    			<td>序号</td>
+		    			<td>姓名</td>
+		    			<td>电话</td>
+		    			<td>操作</td>
+		    			<td>操作2</td>
+		    		</tr>
+	    		</thead>
+	    		<tbody id="body">
+
+	    		</tbody>
+
+	    	</table>
+	    </div>
+	    <div class="mui-control-content" id="phone">
+	    	<header class="mui-bar mui-bar-nav">
+	    	    <h1 class="mui-title">添加联系人</h1>
+	    	</header>
+
+	    	<form class="mui-input-group">
+			    <div class="mui-input-row">
+			        <label>姓名</label>
+			    <input type="text" id="fullname" class="mui-input-clear" placeholder="请输入大名">
+			    </div>
+			    <div class="mui-input-row">
+			        <label>手机号</label>
+			        <input type="tel" id="mobile" class="mui-input-password" placeholder="请输入手机号">
+			    </div>
+			    <div class="mui-button-row">
+			        <button onclick="addContact()" type="button" class="mui-btn mui-btn-primary" >添加联系人</button>
+			        <button type="reset" class="mui-btn mui-btn-danger" >重置</button>
+			    </div>
+			</form>
+	    </div>
+	    <div class="mui-control-content" id="email">
+	    	<header class="mui-bar mui-bar-nav">
+	    	    <h1 class="mui-title">地图</h1>
+	    	</header>
+	    </div>
+	    <div class="mui-control-content" id="setting">
+	    	<header class="mui-bar mui-bar-nav">
+	    	    <h1 class="mui-title">支付</h1>
+	    	</header>
+	    </div>
+	</div>
+
+	<nav class="mui-bar mui-bar-tab">
+	    <a class="mui-tab-item mui-active" href="#contact">
+	        <span class="mui-icon mui-icon-contact"></span>
+	        <span class="mui-tab-label">通讯录</span>
+	    </a>
+	    <a class="mui-tab-item" href="#phone">
+	        <span class="mui-icon mui-icon-phone"></span>
+	        <span class="mui-tab-label">电话</span>
+	    </a>
+	    <a class="mui-tab-item" href="#email">
+	        <span class="mui-icon mui-icon-email"></span>
+	        <span class="mui-tab-label">邮件</span>
+	    </a>
+	    <a class="mui-tab-item" href="#setting">
+	        <span class="mui-icon mui-icon-gear"></span>
+	        <span class="mui-tab-label">设置</span>
+	    </a>
+	</nav>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title  >vue</title>
+    <script src="../js/vue.js"></script>
+    <script src="http://47.94.208.182/base/js/jquery-1.10.1.min.js"></script>
+    <script src="../js/axios.js"></script>
+
+    <style>
+        .box{
+            position: absolute;
+            top:0;
+            left:100px;
+            width:100px;
+            height: 100px;
+            background: orange;
+        }
+        #drag2{
+            top:200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>{{title }}</h2>
+        
+        <div>
+            <h2>vue 注册</h2>
+            <div>
+                <label for="">
+                    <input type="text" placeholder="用户名" v-model="user.username">
+                </label>
+            </div>
+            <div>
+                <label for="">
+                    <input type="text" placeholder="昵称" v-model="user.nickname">
+                </label>
+            </div>
+            <div>
+                <label for="">
+                    <input type="password" placeholder="密码" v-model="user.password">
+                </label>
+            </div>
+            <div>
+                <label for="">
+                    <input type="password" placeholder="确认密码" v-model="user.dbpwd">
+                </label>
+            </div>
+            <div>
+                <button @click="register">注册</button>
+            </div>
+        </div>
+
+    </div>
+ 
+    <!-- 
+        $.ajax
+        axios
+        fetch
+        vue-resource
+
+
+        axios.get()
+        .then   成功的callback
+        .catch  失败的callback 
+
+        axios#get(url[, config])   config method data 
+        axios#post(url[, data[, config]])
+
+        axios 数据存在于 res.data 
+     -->
+
+
+    <script>
+        
+        const vm = new Vue({
+          data:{   // data 属性 
+              title:" axios  请求数据    ",
+              user:{}
+          },
+          methods:{
+            register(){
+                
+               axios({
+                   method:"post",
+                   url:"http://localhost:3100/vue/register",
+                   data:this.user,
+                   
+               }).then(res=>{
+                   console.log(res);
+               });
+
+            //    axios.post("http://localhost:3000/vue/register",this.user).then(res=>{
+            //        console.log(res);
+            //    })
+
+            }
+          },
+          mounted(){
+              document.querySelector("title").innerHTML = this.title;
+          },
+          created(){
+              axios({
+                  url:"http://localhost:3100/index",
+                  method:"get",
+                  params:{
+                      id:12345
+                  },
+              }).then(res=>{
+                  console.log(res);
+              })
+          }
+        }).$mount("#app")
+    
+        
+        axios.get("http://localhost:3100/vue",{
+            params:{
+                id:1234
+            }
+        }).then(res=>{
+            console.log(res);
+        }).catch(err=>{
+            console.log(err);
+        })
+    </script>
+</body>
+</html>
+
+
+

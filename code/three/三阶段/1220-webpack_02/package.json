@@ -1,0 +1,30 @@
+{
+  "name": "my-vue",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --inline --hot"
+  },
+  "author": "zuozuomu",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "file-loader": "^2.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "open-browser-webpack-plugin": "^0.0.5",
+    "source-map": "^0.7.3",
+    "url-loader": "^1.1.2",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.3"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "vue": "^2.5.21",
+    "vue-resource": "^1.5.1",
+    "vue-router": "^3.0.2"
+  }
+}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue-router</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+    <style>
+        .views{
+            border:2px solid red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+       <h3>{{msg}}</h3>
+       <hr>
+       <!-- 5 路由出口-->
+       <router-view class="views"></router-view>
+    </div>
+
+    <template id="home">
+        <div>
+            <h3>home - home - home </h3>
+            <router-link :to="{name:'user',params:{username:'zuozuomu',age:28},query:{id:8888}}">zuozuomu</router-link>
+            <router-link to="/home/user/leson/wh1807/30?id=6666"  >leson</router-link>
+
+            <h2>  ****************************** </h2>
+            <!-- 子路由出口  -->
+            <router-view></router-view>
+        </div>
+    </template>
+
+    <template id="user">
+        <div>
+            <h3>user - user - user</h3>
+            <h2>username : {{$route.params.username}}</h2>
+            <h2>age : {{$route.params.age}}</h2>
+            <h2>id : {{$route.query.id}}</h2>
+            <button @click="goback()">返回</button>
+        </div>
+    </template>
+  
+<!-- 
+        路由 vue-router 
+        构建单页面应用  
+        路由 是用来实现单页面应用的  SPA  single page appliaction 
+
+        某个路由池 注册对应的 路由选项(path,component) url匹配到不同的路由 path 加载对应的路由  component  和 相关数据 
+        组件 (components) 映射到路由 (routes)，然后告诉 Vue Router 在哪里渲染它们 
+
+     -->
+    <script>
+        // 0
+        // 1. 定义路由组件
+        const Home = {
+             template:"#home"
+        }
+        const User = {
+            template:"#user",
+            methods:{
+                goback(){
+                    console.log(this.$router)   // 路由对象 跳转
+                    console.log(router) // 路由对象 跳转
+                    console.log(this.$route);  //  路由信息对象  提供路由相关参数 
+                    router.go(-1);
+                }
+            }
+        }
+        // 2. 定义routes 路由配置 
+        const routes = [
+            // {path:"",component:Home },
+            {    
+                path:"/home",
+                component:Home  ,
+                name:"home",
+                children:[
+                    {
+                        path:"",
+                        redirect:{name:'user',params:{username:'zkl',age:28}}
+                    },
+                    {
+                        path:"user/:username/wh1807/:age",
+                        name:'user',
+                        component:User
+                    },
+                    {
+                        path:"*",
+                        redirect:{name:'user',params:{username:'zkl',age:28}}
+                    }
+                ]
+            },
+            {path:"*",redirect:{name:'user',params:{username:'zkl',age:28}}} 
+        ]
+
+        // 3. 创建路由对象  配置 routes
+        const router = new VueRouter({
+            routes
+        })
+
+        // 4. 挂载 
+        var vm = new Vue({
+            el:"#app",
+            router,
+            data:{
+                msg:"vue -router 嵌套路由  "
+            }
+        })
+
+
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,35 @@
+cordova 打包流程
+0.安装cordova 
+ npm i cordova -g
+1.创建项目
+cordova create name/project com.zuokeliang name/app   
+
+cd name/project 
+2.添加平台支持
+cordova  platform  add android
+cordova  platform  remove android  (移除)
+
+3.添加插件
+cordova plugin add  cordova-plugin-camera
+
+cordova plugin add cordova-plugin-network-information
+ 
+cordova plugin add cordova-plugin-geolocation 
+
+cordova plugin add cordova-plugin-barcodescanner
+
+cordova plugin remove phonegap-plugin-barcodescanner
+
+4.打包输出apk
+cordova build android
+cordova build ios
+
+
+
+JDK       java development kit  java 运行环境程序包
+
+
+SDK       software Development kit  软件运行环境程序包 
+
+
+IDE      编辑器

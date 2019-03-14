@@ -1,0 +1,17 @@
+
+<template name="like">
+        <view>
+           <block>
+              <view>点赞 模板</view>
+              <view>
+                username : {{username}}
+              </view>
+              <view>
+                count : {{count}}
+              </view>
+              <view>
+                word : {{word}}
+              </view>
+           </block>
+        </view>
+    </template> 

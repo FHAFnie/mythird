@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>swiper</title>
+    <!-- 1. 环境支撑  导入css/js -->
+    <script src="../swiper/swiper-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="../swiper/swiper-3.3.1.min.css" >
+    <style>
+        #banner,img{
+            width:800px;
+            height:400px;
+        }
+
+        /* #banner{
+            width:1200px;
+            height:400px;
+        }
+        img{
+            height:400px;
+            width:400px;
+        } */
+
+        .swiper-pagination-bullet {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            opacity: .2;
+            border-radius: 100%;
+            background: #000;
+        }
+        .swiper-pagination-bullet-active{
+            opacity: 1;
+            background: #fff;
+        }
+    </style>
+
+</head>
+<body>
+    <!-- 2 满足 swiper HTML 静态解构  -->
+    <div class="swiper-container" id="banner" >
+        <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="http://47.94.208.182/base/img/1.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="http://47.94.208.182/base/img/2.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="http://47.94.208.182/base/img/3.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="http://47.94.208.182/base/img/4.jpg" alt=""></div>
+        </div>
+        <!-- 分页小点  -->
+        <div class="swiper-pagination"></div>
+    </div>
+
+    <!-- 3 swiper 实例化  -->
+    <script>
+        var mySwiper = new Swiper("#banner",{
+            speed:1000,
+            autoplay:10000,   // 自动播放
+            loop:true,
+            effect:'slide',
+            pagination:".swiper-pagination",
+            // clickable:true  // 点击切换swiper
+            paginationClickable:true , // 点击控制 切换 slide
+            // effect:'fade',
+            // effect : 'cube',
+            // cubeEffect: {
+            //     slideShadows: true,
+            //     shadow: true,
+            //     shadowOffset: 100,
+            //     shadowScale: 0.6
+            // },
+            // effect : 'coverflow',
+            // slidesPerView: 3,
+            // centeredSlides: true,
+            // coverflowEffect: {
+            //     rotate: 30,
+            //     stretch: 10,
+            //     depth: 60,
+            //     modifier: 2,
+            //     slideShadows : true
+            // },
+            // effect : 'flip',
+            // flipEffect: {
+            //     slideShadows : true,
+            //     limitRotation : true,
+            // }
+
+        })
+    </script>
+</body>
+</html>

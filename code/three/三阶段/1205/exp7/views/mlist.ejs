@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="/bootstrap/js/jquery-1.10.1.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <title>评论列表</title>
+    <style>
+        .box{
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+        <%-  include("head",{index:6}) %>
+        <div class="container container-fluid">
+            <div class="row">
+                <button class="btn btn-primary" onclick="location.href='/comment/mlist?mid=<%- mid %>'">查看当前电影的所有评论</button>
+                <button class="btn btn-success" onclick="location.href='/comment/mlist?username=<%- username %>'">查看我的所有评论</button>
+            </div>
+            <div class="row">
+                <table class="table table-hover table-bordered">
+                    <caption class="h1 text-info">电影评论</caption>
+                    <tr class="text-center text-danger">
+                        <td>序号</td>
+                        <td>标题</td>
+                        <td style="width:20%">内容</td>
+                        <td>电影名称</td>
+                        <td>评论人</td>
+                        <td>评论时间</td>
+                        <td>操作</td>
+                        <td>操作</td>
+                    </tr>
+                <%    if(result.length>0){   %>
+
+                      <%  result.forEach((item,index)=>{  %>
+                            <tr class="text-center">
+                                <td><%- index+1 %></td>
+                                <td class="text-info"><a href="/comment/detail?mid=<%- item.mid %>&uid=<%- item.uid %>"> <%- item.title %></a></td>
+                                <td class="text-danger" style="width:20%"><%- item.content %></td>
+                                <td><a href="/comment/mv-detail?mid=<%- item.mid %>"><%- item.mTitle %></a></td>
+                                <td><%- item.username %></td>
+                                <td><%- item.time %></td>
+                                <td><button onclick="setUid('<%-item.uid %>')" data-target="#deleteBox" data-toggle="modal"  <%- username==item.username ? '' : 'disabled' %> class="btn btn-danger">删除</button></td>
+                                <td>
+                                    <!-- <button onclick="getItem('<%- item._id%>','<%- item.title%>','<%- item.content%>')"  data-target="#updateBox" data-toggle="modal" <%- username==item.username ? '' : 'disabled' %> class="btn btn-success">修改</button> -->
+                                    <button onclick="location.href='/comment/update?uid=<%-item.uid %>'"  <%- username==item.username ? '' : 'disabled' %> class="btn btn-info">修改2</button>
+                                </td>
+                            </tr>
+                   <%     })   %>
+                   <tr>
+                       <td  colspan="8" >
+                            <button onclick="setUid('-1')" data-target="#deleteBox" data-toggle="modal" class="btn btn-danger pull-right" >删除所有</button>
+                       </td>
+                   </tr>
+                   <tr>
+                       <td colspan="8" class="text-primary">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                    <li><a href="/comment/mlist?pageNo=1">首页</a></li>
+                                    <li>
+                                    <a href="/comment/mlist?pageNo=<%- pageNo-1<=1?1:pageNo-1 %>" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                    </li>
+
+                                    <% if(pageNo>2){ %>
+                                    <li ><a href="/comment/mlist?pageNo=<%- pageNo - 2 %>"><%- pageNo -  2 %></a></li>
+                                    <% } %>
+
+                                   <% if(pageNo>1){ %>
+                                        <li><a href="/comment/mlist?pageNo=<%- pageNo -1 %>"><%- pageNo - 1 %></a></li>
+                                   <% } %>
+
+                                    <li class="active"><a href="/comment/mlist?pageNo=<%- pageNo%>"><%- pageNo %></a></li>
+
+                                    <% if(pageNo<totalPage-1){ %>
+                                    <li><a href="/comment/mlist?pageNo=<%- pageNo +1 %>"><%- pageNo +1 %></a></li>
+                                    <% } %>
+                                    
+                                    <% if(pageNo<totalPage-2){ %>
+                                    <li><a href="/comment/mlist?pageNo=<%- pageNo +2 %>"><%- pageNo +2 %></a></li>
+                                    <% } %>
+                                    <li>
+                                    <a href="/comment/mlist?pageNo=<%- pageNo+1>=totalPage?totalPage:pageNo+1  %>" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                    </li>
+                                    <li><a href="/comment/mlist?pageNo=<%-totalPage %>">尾页</a></li>
+                                </ul>
+                            </nav>
+                       </td>
+                   </tr>
+                   <tr>
+                        <td colspan="8">
+                            <p class="h5 text-success">       <%- pageNo %> / <%- totalPage %>  页  总  <%- count  %>  条  </p>
+                        </td>
+                   </tr>
+                   
+
+                   <% }else{   %>
+                    
+                        <tr>
+                            <td colspan="8" class="text-danger  text-center text-muted">
+                                <p>暂无评论...</p>
+                            </td>
+                        </tr>
+
+                  <%  }  %>
+                </table>
+
+            </div>
+        </div>
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="deleteBox">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">删除评论</h4>
+                </div>
+                <div class="modal-body">
+                    <p>你确定要删除评论吗&hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="delCommentById()">确定</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="updateBox">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">修改评论</h4>
+                </div>
+                <div class="modal-body">
+                    <div >
+                        <div class="form-group">
+                            <label for="title">评论标题:</label>
+                            <input type="text"  class="form-control" id="title"  />
+                        </div>
+                        <div class="form-group">
+                            <label for="content">评论内容:</label>
+                            <textarea  class="form-control" id="content"  ></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="updateBy_id()">确定</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <%- include footer %>
+        <script>
+            var uid = null
+            function setUid(id){
+                uid = id;
+                console.log(uid); 
+            }
+
+            function delCommentById(){
+                // 发送ajax 
+                // 实现局部刷新数据 
+
+                $.ajax({
+                    url:"/comment/deleteById",
+                    type:'get',
+                    data:{
+                        uid:uid,
+                    },
+                    success(data){
+                        console.log(data);
+                        $('#deleteBox').modal('toggle');
+                        // window.location.reload()
+                        window.location.href = "/comment/mlist"
+
+                    }
+                })
+            }
+            
+            var _id = null;
+            function getItem(id,title,content){
+                _id = id;
+                console.log(_id);
+                $("#title").val(title)
+                $("#content").val(content)
+
+            }
+
+            function updateBy_id(){
+                $.ajax({
+                    url:"/comment/updateById",
+                    type:"GET",
+                    data:{
+                        _id:_id,
+                        title:$("#title").val(),
+                        content:$("#content").val()
+                    },
+                    success(data){
+                        console.log(data);
+                        $('#updateBox').modal('toggle');
+                        window.location.reload()
+                    }
+                })
+            }
+
+        </script>
+</body>
+</html>

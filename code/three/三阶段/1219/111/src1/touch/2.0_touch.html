@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>300ms 延迟</title>
+    <script src="http://47.94.208.182/base/js/jquery-1.10.1.min.js"></script>
+    <style>
+    .op{
+        border:2px solid darkgreen;
+        height:40px;
+        line-height: 40px;
+    }
+    .op span{
+        color:red;
+        font-size:40px;
+       
+    }
+    </style>
+</head>
+<body>
+    <div>
+        <p class="op" id="touch">
+            touch <span id="tp"></span> ms 
+        </p>
+        <p  class="op" id="click">
+            click <span id="cp"></span> ms 
+        </p>
+    </div>
+
+    <script>
+        var start = 0;
+        var end = 0;
+        
+        // 验证 300ms  延迟 
+        $("#touch").on("touchstart",()=>{
+            start = new Date();
+        });
+
+        $("#touch").on("touchend",()=>{
+            end = new Date();
+            $("#tp").html(end-start);
+        })
+
+        $("#click").on("touchstart",()=>{
+            start = new Date();
+        })
+
+        $("#click").on("click",()=>{
+            end= new Date();
+            $("#cp").html(end-start);
+        })
+    </script>
+</body>
+</html>

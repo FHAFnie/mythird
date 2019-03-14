@@ -1,0 +1,23 @@
+/* pages/good-detail/good-detail.wxss */
+
+.img {
+  width:100%;
+  height:500rpx;
+}
+
+.inp{
+  width:70rpx;
+  height:70rpx;
+  border:2rpx solid #ddd;
+  display: inline-block;
+  text-align: center;
+  line-height: 70rpx
+}
+
+.action{
+  width:100%;
+  display: flex;
+}
+.action button{
+  flex:1;
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+    <style>
+        canvas{
+            border:1px solid #000;
+            margin:30px auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas width=800 height=400  id="mycanvas" class="mycanvas" name="mycanvas" >浏览器不支持 canvas 标签 </canvas>
+
+    <script>
+        var mycanvas = document.getElementById("mycanvas")
+        var c = mycanvas.getContext("2d");
+        
+
+        c.beginPath();
+        c.moveTo(0,200);
+        c.lineTo(800,200);
+        c.strokeStyle = "blue";
+        c.stroke();
+        c.closePath();
+
+        // quadraticCurveTo(kx,ky,x,y);  
+        with(c){
+            beginPath();
+            moveTo(0,100);
+            // lineTo(400,100);
+            // quadraticCurveTo(200,400,400,100);
+            strokeStyle = "yellow"
+            lineWidth = 6;
+            stroke();
+            closePath();
+        }
+        
+        // bezierCurveTo (kx1,ky1,kx2,ky2,ex,ey)：
+        // 三次贝塞尔曲线，两个控制点，一个终点
+
+        c.beginPath();
+        c.moveTo(600,0);
+        // c.bezierCurveTo(400,100,800,300,600,400)
+        // c.lineTo(600,400);
+        c.stroke();
+        c.closePath();
+
+
+        // 绘制文字
+        c.beginPath();
+        c.font = "58px 微软雅黑";
+        c.textAlign = "center";  // start left center
+        c.textBaseline = "middle"  ; // top hanging  middle  alphabetic ideographic  bottom
+        c.fillStyle = "red";
+        c.lineWidth = 2;
+        c.strokeStyle = "blue";
+        c.fillText("Wuhan1807 daydayUp ~ !",400,200);   
+        c.strokeText("Wuhan1807 daydayUp ~ !",400,200);
+        c.closePath();
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+

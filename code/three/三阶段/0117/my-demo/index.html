@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+      	
+     	document.addEventListener("plusready",plusReady,false);
+		
+		// plusReady 询问 API 设备是否准备好 
+		function plusReady(){
+			getdevice();
+//			getNewWork();
+			getAcc()
+			getGeo()
+			getAuthServices()
+			getShareService();
+		}
+		// 分享
+		var shares = null;
+		function getShareService(){
+			plus.share.getServices(function(s){
+				shares = s;
+				console.log(JSON.stringify(shares));
+			}, function(e){
+				alert("获取分享服务列表失败："+e.message);
+			});
+		}
+		
+		function shareAction(id){
+			var s = {};
+			for(var i in shares){
+				if(shares[i].id==id){
+					 s = shares[i]
+				}
+			}
+			
+			if(!s){
+				return;
+			}
+			if(s.authenticated){
+				shareMessage(s);
+			}else{
+				s.authorize(shareMessage, function(e){
+					alert("未进行认证");
+				});
+			}
+		}
+		
+		function shareMessage(s){
+			
+//			s.send( {content:"武汉1807-天道酬勤 - fighting",href:"http://www.dcloud.io/",extra:{scene:"WXSceneTimeline"}}, function(){
+//				alert("分享成功！");
+//			}, function(e){
+//				alert("分享失败："+e.message);
+//			});
+			s.send({content:""}, function(){
+				alert("分享成功！");
+			},function(e){
+				alert("分享失败："+e.message);
+			});
+		}
+		
+		// 通过系统组件分享 
+		function shareSystem(){
+			plus.share.sendWithSystem({content:'wuhan1807-daydayup',href:'http://47.94.208.182/project/student/'}, function(){
+				console.log('分享成功');
+			}, function(e){
+				console.log('分享失败：'+JSON.stringify(e));
+			});
+		}
+		
+	
+		// 第三方登录 
+		var auths = null;
+		function getAuthServices(){
+			plus.oauth.getServices(
+				(services)=>{
+					
+					auths = services;
+					console.log(JSON.stringify(auths))
+				},
+				(e)=>{
+					alert( "获取分享服务列表失败："+e.message+" - "+e.code );
+				}
+			)
+		}
+		
+		function getAuth(index){
+			var s = auths[index];
+			if (!s.authResult ) {
+				s.login( function(e){
+					alert( "登录认证成功！" );
+					s.getUserInfo( function(e){
+						alert( "获取用户信息成功："+JSON.stringify(s.userInfo) );
+					}, function(e){
+						alert( "获取用户信息失败："+e.message+" - "+e.code );
+					} );
+				}, function(e){
+					alert( "登录认证失败！" );
+				} );
+			}else{
+				alert( "已经登录认证！" );
+			}
+		}
+		
+		function getNewWork(){
+			var types = {}; 
+			types[plus.networkinfo.CONNECTION_UNKNOW] = "Unknown connection"; 
+			types[plus.networkinfo.CONNECTION_NONE] = "None connection"; 
+			types[plus.networkinfo.CONNECTION_ETHERNET] = "Ethernet connection"; 
+			types[plus.networkinfo.CONNECTION_WIFI] = "WiFi connection"; 
+			types[plus.networkinfo.CONNECTION_CELL2G] = " 2G connection"; 
+			types[plus.networkinfo.CONNECTION_CELL3G] = " 3G connection"; 
+			types[plus.networkinfo.CONNECTION_CELL4G] = " 4G connection"; 
+			
+			alert( "网络状态 : " + types[plus.networkinfo.getCurrentType()] );
+		}
+		
+		// 设备信息
+		function getdevice(){
+			var dev = document.getElementById("device");
+			console.log(dev);
+			dev.onclick = function(){
+//				plus.device.dial( "10086", false );
+//				plus.device.beep( 3 );
+				plus.device.vibrate( 2000 );
+			}
+			dev.innerHTML = "设备的国际移动设备身份码  imei :" + plus.device.imei + "<br>" +
+								"设备的国际移动用户识别码  imsi :" + plus.device.imsi + "<br>" +
+								"设备的型号  model :" + plus.device.model + "<br>" +
+								"设备的生产厂商  vendor :" + plus.device.vendor + "<br>" +
+								"设备的唯一标识  uuid :" + plus.device.uuid + "<br>" ;
+			
+		}
+		
+		// 获取加速度 
+		function getAcc(){
+			var acc = document.getElementById("acc");
+			plus.accelerometer.watchAcceleration(
+				(a)=>{
+					acc.innerText =  "x加速度:" + a.xAxis + "\ny加速度:" + a.yAxis + "\nz加速度:" + a.zAxis;
+				},
+				(e)=>{
+					alert( "Acceleration error: " + e.message ); 
+				}
+			)
+		}
+		
+		// 获取 地理定位 
+		function getGeo(){
+			plus.geolocation.getCurrentPosition(onSuccess,onFail);
+			
+			function onSuccess(p){
+				console.log(JSON.stringify(p));
+				var geo = document.getElementById("geo");
+				geo.innerHTML = "经度  longitude :" + p.coords.longitude + "<br>"
+      								+"纬度  latitude :" +p.coords.latitude + "<br>"
+      								+"海拔  altitude :" +p.coords.altitude + "<br>"
+      								+"时间戳  timestamp :" +p.timestamp + "<br>"
+      								+"国家  country :" +p.address.country + "<br>"
+      								+"省份  province :" +p.address.province + "<br>"
+      								+"城市  city :" +p.address.city + "<br>"
+      								+"区  district :" +p.address.district + "<br>"
+      								+"街道  street :" +p.address.street + "<br>"
+			}
+			
+			function onFail(e){
+				alert("定位失败 ：" + e.message);
+			}
+		}
+		
+		function takePhoto(){
+			alert("开始拍照");
+			var cmr = plus.camera.getCamera();  // 得到摄像头 
+			var res = cmr.supportedImageResolutions[0];
+			var fmt = cmr.supportedImageFormats[0];
+			
+			cmr.captureImage(
+				(path)=>{
+					alert(path);
+					var pic = document.getElementById("pic");
+					plus.io.resolveLocalFileSystemURL(path, function(entry){  // 路径转化 
+						pic.src = entry.toLocalURL();
+					}, function(e){
+						outLine('读取拍照文件错误：'+e.message);
+					});
+				},
+				(e)=>{
+					alert("拍照失败 :" + e.message);
+				},
+				{resolution:res,format:fmt}
+			)
+		}
+		
+		var scan = null; 
+		 
+		function startscan(){
+			var bcid = document.getElementById("bcid"); // 扫描控件 bcid
+//			bcid.style.display = "block";
+			scan = new plus.barcode.Barcode('bcid');
+			alert("开始扫描");
+			scan.start();   // 开始扫描 
+			
+			scan.onmarked = function(type,result){   // 扫描成功
+				var text = '未知: ';
+				switch(type){
+					case plus.barcode.QR:
+					text = 'QR: ';
+					break;
+					case plus.barcode.EAN13:
+					text = 'EAN13: ';
+					break;
+					case plus.barcode.EAN8:
+					text = 'EAN8: ';
+					break;
+				}
+				alert( text+result );
+				window.location.href = result;
+				scan.close();
+				bcid.style.display = "none";
+			};
+		}
+    </script>
+    <style>
+    	.content{
+    		padding:50px 10px;
+    		
+    		box-sizing: border-box;
+    		width: 100%;
+    	}
+    	
+    	.box{
+    		width:100%;
+    		height:50vh;
+    		margin-bottom: 10px;
+    		border:3px dotted darkgreen
+    		color:red;
+    		font-size: 24px;
+    		line-height: 32px;
+    		text-align: center;
+    	}
+    	
+    	#bcid{
+    		width:100%;
+    		height: 60vh;
+    		background: darkgoldenrod;
+    		
+    	}
+    	
+    </style>
+</head>
+<body>
+	
+	<div class="mui-content content">
+	    <div class="mui-control-content" id="home">
+	    	<header class="mui-bar mui-bar-nav">
+	    	    <h1 class="mui-title">首页</h1>
+	    	</header>
+	    	
+	    	<ul class="mui-table-view">
+	    	    <li class="mui-table-view-cell mui-media">
+	    	        <a href="javascript:;">
+	    	            <img class="mui-media-object mui-pull-right" src="http://47.94.208.182/base/img/1.jpg">
+	    	            <div class="mui-media-body">
+	    	                幸福
+	    	                <p class="mui-ellipsis">能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
+	    	            </div>
+	    	        </a>
+	    	    </li>
+	    	    <li class="mui-table-view-cell mui-media">
+	    	        <a href="javascript:;">
+	    	            <img class="mui-media-object mui-pull-right" src="http://47.94.208.182/base/img/3.jpg">
+	    	            <div class="mui-media-body">
+	    	                木屋
+	    	                <p class="mui-ellipsis">想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
+	    	            </div>
+	    	        </a>
+	    	    </li>
+	    	    <li class="mui-table-view-cell mui-media">
+	    	        <a href="javascript:;">
+	    	            <img class="mui-media-object mui-pull-right" src="http://47.94.208.182/base/img/5.jpg">
+	    	            <div class="mui-media-body">
+	    	                CBD
+	    	                <p class="mui-ellipsis">烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
+	    	            </div>
+	    	        </a>
+	    	    </li>
+	    	</ul>
+	    	
+	    	<ul class="mui-table-view">
+	    	    <li class="mui-table-view-cell mui-media">
+	    	        <a href="javascript:;">
+	    	            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+	    	            <div class="mui-media-body">
+	    	                幸福
+	    	                <p class="mui-ellipsis">能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
+	    	            </div>
+	    	        </a>
+	    	    </li>
+	    	    <li class="mui-table-view-cell mui-media">
+	    	        <a href="javascript:;">
+	    	            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+	    	            <div class="mui-media-body">
+	    	                木屋
+	    	                <p class="mui-ellipsis">想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
+	    	            </div>
+	    	        </a>
+	    	    </li>
+	    	    <li class="mui-table-view-cell mui-media">
+	    	        <a href="javascript:;">
+	    	            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+	    	            <div class="mui-media-body">
+	    	                CBD
+	    	                <p class="mui-ellipsis">烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
+	    	            </div>
+	    	        </a>
+	    	    </li>
+	    	</ul>
+	    </div>
+	    <div class="mui-control-content" id="phone">
+	    	<header class="mui-bar mui-bar-nav">
+	    	    <h1 class="mui-title">电话</h1>
+	    	</header>
+	    	
+	    	<div class="mui-card" >
+				<div class="mui-card-header mui-card-media">
+					<img src="http://47.94.208.182/base/img/3.jpg">
+					<div class="mui-media-body">
+						小左
+						<p>发表于 2019-01-16 17:20</p>
+					</div>
+				</div>
+				<div class="mui-card-content">
+					<img id="pic" height="400" src="http://47.94.208.182/base/img/4.jpg" alt="" width="100%">
+				</div>
+				<div class="mui-card-footer">
+					<a class="mui-card-link">点赞</a>
+					<a class="mui-card-link">评论</a>
+					<a onclick="takePhoto()" class="mui-card-link">拍照</a>
+				</div>
+			</div>
+			<button type="button" onclick="startscan()" class="mui-btn mui-btn-primary mui-btn-block">扫描二维码</button>
+			<div id="bcid"></div>
+			
+	    </div>
+	    <div class="mui-control-content" id="email">
+	    	<header class="mui-bar mui-bar-nav">
+	    	    <h1 class="mui-title">邮件</h1>
+	    	</header>
+	    	<button type="button"  onclick="getAuth(0)" class="mui-btn mui-btn-royal mui-btn-block">QQ登录</button>
+	    	<button type="button" onclick="getAuth(1)" class="mui-btn mui-btn-success mui-btn-block">小米登录</button>
+	    	<button type="button" onclick="getAuth(2)" class="mui-btn mui-btn-warning mui-btn-block">新浪微博登录</button>
+	    	<button type="button" onclick="getAuth(3)" class="mui-btn mui-btn-primary mui-btn-block">微信登录</button>
+	    	<button type="button" onclick="shareSystem()" class="mui-btn mui-btn-success mui-btn-block">系统组件分享</button>
+	    	<button type="button" onclick="openActionsheet()" class="mui-btn mui-btn-success mui-btn-block">自定义分享</button>
+	    	
+	    	<div id="sheet1" class="mui-popover mui-popover-bottom mui-popover-action ">
+			    <!-- 可选择菜单 -->
+			    <ul class="mui-table-view">
+			      <li class="mui-table-view-cell">
+			        <a onclick="shareAction('qq')">QQ分享</a>
+			      </li>
+			      <li class="mui-table-view-cell">
+			        <a onclick="shareAction('weixin')">微信分享</a>
+			      </li>
+			      <li class="mui-table-view-cell">
+			        <a onclick="shareAction('sinaweibo')">新浪微博分享</a>
+			      </li>
+			    </ul>
+			    <!-- 取消菜单 -->
+			    <ul class="mui-table-view">
+			      <li class="mui-table-view-cell">
+			        <a href="#sheet1"><b>取消</b></a>
+			      </li>
+			    </ul>
+			</div>
+	    </div>
+	    <div class="mui-control-content" id="setting">
+	    	<header class="mui-bar mui-bar-nav">
+	    	    <h1 class="mui-title">设置</h1>
+	    	</header>
+	    	
+	    	<div id="slider" class="mui-slider" >
+	    	  <div class="mui-slider-group mui-slider-loop">
+	    	    <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+	    	    <div class="mui-slider-item mui-slider-item-duplicate">
+	    	      <a href="#">
+	    	        <img src="http://47.94.208.182/base/img/4.jpg" height="300" >
+	    	      </a>
+	    	    </div>
+	    	    <!-- 第一张 -->
+	    	    <div class="mui-slider-item">
+	    	      <a href="#">
+	    	        <img src="http://47.94.208.182/base/img/1.jpg" height="300">
+	    	      </a>
+	    	    </div>
+	    	    <!-- 第二张 -->
+	    	    <div class="mui-slider-item">
+	    	      <a href="#">
+	    	        <img src="http://47.94.208.182/base/img/2.jpg" height="300">
+	    	      </a>
+	    	    </div>
+	    	    <!-- 第三张 -->
+	    	    <div class="mui-slider-item">
+	    	      <a href="#">
+	    	        <img src="http://47.94.208.182/base/img/3.jpg" height="300">
+	    	      </a>
+	    	    </div>
+	    	    <!-- 第四张 -->
+	    	    <div class="mui-slider-item">
+	    	      <a href="#">
+	    	        <img src="http://47.94.208.182/base/img/4.jpg" height="300">
+	    	      </a>
+	    	    </div>
+	    	    <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+	    	    <div class="mui-slider-item mui-slider-item-duplicate">
+	    	      <a href="#">
+	    	        <img src="http://47.94.208.182/base/img/1.jpg" height="300">
+	    	      </a>
+	    	    </div>
+	    	  </div>
+	    	  <div class="mui-slider-indicator">
+	    	    <div class="mui-indicator mui-active"></div>
+	    	    <div class="mui-indicator"></div>
+	    	    <div class="mui-indicator"></div>
+	    	    <div class="mui-indicator"></div>
+	    	  </div>
+	    	</div>
+	    	
+	    <div class="mui-card" >
+			<div class="mui-card-header mui-card-media">
+				<img src="http://47.94.208.182/base/img/3.jpg">
+				<div class="mui-media-body">
+					小左
+					<p>发表于 2019-01-16 17:20</p>
+				</div>
+			</div>
+			<div class="mui-card-content">
+				<div class="box" id="device">获取设备信息...</div>
+				<div class="box" id="geo">获取地理定位信息...</div>
+				<div class="box" id="acc">获取手机设备加速度信息...</div>
+				
+			</div>
+			<div class="mui-card-footer">
+				<a class="mui-card-link">点赞</a>
+				<a class="mui-card-link">评论</a>
+				<a class="mui-card-link">拍照</a>
+			</div>
+		</div>
+	    </div>
+	    
+
+	</div>
+	
+	<nav class="mui-bar mui-bar-tab">
+	    <a class="mui-tab-item mui-active" href="#home">
+	        <span class="mui-icon mui-icon-home"></span>
+	        <span class="mui-tab-label">首页</span>
+	    </a>
+	    <a class="mui-tab-item" href="#phone">
+	        <span class="mui-icon mui-icon-phone"></span>
+	        <span class="mui-tab-label">电话</span>
+	    </a>
+	    <a class="mui-tab-item" href="#email">
+	        <span class="mui-icon  mui-icon-qq"></span>
+	        <span class="mui-tab-label">邮件</span>
+	    </a>
+	    <a class="mui-tab-item" href="#setting">
+	        <span class="mui-icon mui-icon-gear"></span>
+	        <span class="mui-tab-label">设置</span>
+	    </a>
+	</nav>
+	
+	<script>	
+		function openActionsheet(){
+			alert("open");
+			mui('#sheet1').popover('toggle');
+		}
+	</script>
+</body>
+</html>

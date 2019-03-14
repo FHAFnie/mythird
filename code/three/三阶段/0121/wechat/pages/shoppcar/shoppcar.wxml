@@ -1,0 +1,43 @@
+<!--pages/shoppcar/shoppcar.wxml-->
+<!-- <text>pages/shoppcar/shoppcar.wxml</text> -->
+<view class="show">
+  <view class="content">
+    <view class="li" wx:for="{{carList}}" wx:key="index">
+
+      <checkbox value="{{item.checked}}" data-goodid="{{item.goodsId}}"  bindtap="checkOne"></checkbox>
+      <view class='cover'>
+        <image src="{{item.img}}"></image>
+      </view>
+      <view class='cont'>
+        <view class="word">
+          {{item.name}}
+        </view>
+        <view class="pricebox">
+          <text>￥{{item.price}}</text>
+          <view class="numbox">
+            <text class="add">-</text>
+            <input value="{{item.count}}" type="text" redOnly/>
+            <text class="reduce">+</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="del">
+        <text>删除</text>
+      </view>
+    </view>
+
+
+
+  </view>
+
+
+  <view class="footer">
+    全选 :  
+    <checkbox class="checkall" checked="{{quan}}" bindtap="checkAll" ></checkbox>
+
+    <text class="price">总价 : {{total}}</text>
+  </view>
+
+
+</view>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title  >vue</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        .box{
+            position: absolute;
+            top:0;
+            left:100px;
+            width:100px;
+            height: 100px;
+            background: orange;
+        }
+        #drag2{
+            top:200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>{{title }}</h2>
+        <c-head></c-head>
+        <c-foot></c-foot>
+    </div>
+
+    <!-- 
+
+        组件是可复用的 Vue 实例
+        data 属性  
+        组件里面的  data 属性 是一个函数  必须有return  而且必须返回 对象 
+     -->
+
+     <template id="head" >
+        <div>
+            <header>
+                <span>wh1807</span>
+                <p>{{msg}}</p>
+            </header>
+        </div>
+     </template>
+
+     <script type="text/x-template" id="foot">
+        <div>
+            <footer>
+                foot-foot-foot
+            </footer>
+        </div>
+     </script>
+     
+    <script>
+
+        const head = {
+            template:"#head",
+            data(){
+                return {
+                    msg:"Are you ok"
+                }
+            }
+        }
+
+
+        Vue.component("c-head",head);
+
+
+        const vm = new Vue({
+          data:{   // data 属性 
+              title:" 组件 - component  template ",
+     
+          },
+          components:{
+              "c-foot":{
+                  template:"#foot"
+              }
+          },
+          mounted(){
+              document.querySelector("title").innerHTML = this.title;
+
+          }
+        }).$mount("#app")
+    
+
+    </script>
+</body>
+</html>
+
+
+

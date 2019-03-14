@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h3>{{msg}}</h3>
+
+        <div>
+            <p v-for="(todo,index) in todos">
+                {{todo}} -- {{index}} 
+                <button @click="del(index)">XX</button>
+            </p>
+        </div>
+        <div>
+            <input type="text" placeholder="please" v-model="txt" >
+            <button v-on:click="addTodo()">添加</button>
+        </div>
+    </div>
+
+    <div id="demo">
+        <h2>{{msg}}</h2>
+        <h3>{{txt   }}</h3>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el:"#app",
+            data:{
+                msg:"hello vue---todoList",
+                todos:[
+                    "天道酬勤","坚持不懈","奋发图强","激流勇进"
+                ],
+                txt:""
+            },
+            methods:{
+                addTodo(){
+                    this.todos.push(this.txt);
+                    this.txt = "";
+                },
+                del(index){
+                    this.todos.splice(index,1);
+                }
+            }
+        })
+
+
+        function Vux(options){
+            console.log(options);
+
+            this.el = options.el;
+            this.rootNode = document.querySelector(this.el);
+            
+            this.data =  options.data;
+
+            this.init = function(){
+                var that  = this;
+                for(var i in this.data){
+                    that[i] =  this.data[i]; 
+                    var key = i;
+                    var reg = new RegExp("{{" + ' {0,}' + key + ' {0,}' + "}}", 'gi');
+                    this.rootNode.innerHTML = this.rootNode.innerHTML.replace(reg,this[key])
+                }
+            }
+            this.init();
+            
+        }
+
+        var v = new Vux({
+            el:"#demo",
+            data:{
+                msg:"daydayup",
+                txt:"1807 一定要学会vue "
+            },
+            methods:{
+
+            }
+        })
+    </script>
+</body>
+</html>

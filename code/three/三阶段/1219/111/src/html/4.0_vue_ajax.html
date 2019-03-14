@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title  >vue</title>
+    <script src="../js/vue.js"></script>
+    <script src="http://47.94.208.182/base/js/jquery-1.10.1.min.js"></script>
+    <style>
+        .box{
+            position: absolute;
+            top:0;
+            left:100px;
+            width:100px;
+            height: 100px;
+            background: orange;
+        }
+        #drag2{
+            top:200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>{{title }}</h2>
+        
+        <div>
+            <h2>vue 注册</h2>
+            <div>
+                <label for="">
+                    <input type="text" placeholder="用户名" v-model="user.username">
+                </label>
+            </div>
+            <div>
+                <label for="">
+                    <input type="text" placeholder="昵称" v-model="user.nickname">
+                </label>
+            </div>
+            <div>
+                <label for="">
+                    <input type="password" placeholder="密码" v-model="user.password">
+                </label>
+            </div>
+            <div>
+                <label for="">
+                    <input type="password" placeholder="确认密码" v-model="user.dbpwd">
+                </label>
+            </div>
+            <div>
+                <button @click="register">注册</button>
+            </div>
+        </div>
+
+    </div>
+ 
+    <!-- 
+        jquery
+        $.get
+        $.post
+        $.load
+        $.getScript
+        
+        $.ajax({
+            url,
+            type,
+            data,
+            dataType,
+            timeout,
+            beforeSend,
+            success,
+            error,
+        })
+
+     -->
+
+
+    <script>
+        
+        const vm = new Vue({
+          data:{   // data 属性 
+              title:" axios  请求数据    ",
+              user:{}
+          },
+          methods:{
+            register(){
+                // $.ajax({
+                //     url:"http://localhost:3000/vue/register",
+                //     type:"POST",
+                //     data:this.user,
+                //     success(data){
+                //         console.log(data);
+                //     }
+                // });
+                    
+                $.post("http://localhost:3000/vue/register",this.user).then(res=>{
+                    console.log(res);
+                })
+
+
+            }
+          },
+          mounted(){
+              document.querySelector("title").innerHTML = this.title;
+          },
+          created(){
+              $.get("http://localhost:3000/vue/wh1807/2019happy",{
+                  id:1807
+              }).then(res=>{
+                  console.log(res);
+                  this.title = res;
+              })
+          }
+        }).$mount("#app")
+    
+        $.ajax({
+            url:"http://localhost:3000/vue/like",
+            type:"GET",
+            data:{
+                id:1234
+            },
+            success(data){
+                console.log(data);
+            }   
+        })
+        
+    </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title  >vue</title>
+    <script src="../js/vue.js"></script>
+    <script src="http://47.94.208.182/base/js/jquery-1.10.1.min.js"></script>
+    <script src="../js/vue-resource.js"></script>
+
+    <style>
+        .box{
+            position: absolute;
+            top:0;
+            left:100px;
+            width:100px;
+            height: 100px;
+            background: orange;
+        }
+        #drag2{
+            top:200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>{{title }}</h2>
+        
+        <div>
+            <h2>vue 注册</h2>
+            <div>
+                <label for="">
+                    <input type="text" placeholder="用户名" v-model="user.username">
+                </label>
+            </div>
+            <div>
+                <label for="">
+                    <input type="text" placeholder="昵称" v-model="user.nickname">
+                </label>
+            </div>
+            <div>
+                <label for="">
+                    <input type="password" placeholder="密码" v-model="user.password">
+                </label>
+            </div>
+            <div>
+                <label for="">
+                    <input type="password" placeholder="确认密码" v-model="user.dbpwd">
+                </label>
+            </div>
+            <div>
+                <button @click="register">注册</button>
+            </div>
+        </div>
+
+    </div>
+ 
+    <!-- 
+        $.ajax
+        axios
+        fetch
+        vue-resource
+
+
+       // 基于全局Vue对象使用http
+        Vue.http.get('/someUrl', [options]).then(successCallback, errorCallback);
+        Vue.http.post('/someUrl', [body], [options]).then(successCallback, errorCallback);
+
+        // 在一个Vue实例内使用$http
+        this.$http.get('/someUrl', [options]).then(successCallback, errorCallback);
+        this.$http.post('/someUrl', [body], [options]).then(successCallback, errorCallback);
+     -->
+
+
+    <script>
+        Vue.http.get("http://localhost:3100/vue",{
+            params:{
+                id:1234
+            }
+        }).then(
+        res=>{
+            console.log(res)
+        },err=>{
+            console.log(err);
+        })
+
+
+        const vm = new Vue({
+          data:{   // data 属性 
+              title:" vue-resource  请求数据    ",
+              user:{}
+          },
+          methods:{
+            register(){
+                // this.$http.post("http://localhost:3100/vue/register",this.user,{
+                //     params:{
+                //         id:99
+                //     }
+                // })
+                // .then(res=>{
+                //     console.log(res);
+                // })
+
+                this.$http({
+                    method:"post",
+                    url:"http://localhost:3100/vue/register",
+                    body:this.user,
+                    params:{
+                        id:100
+                    }
+                }).then(res=>{
+                    console.log(res)
+                })
+            }
+          },
+          mounted(){
+              document.querySelector("title").innerHTML = this.title;
+          },
+          created(){
+             this.$http({
+                 url:"http://localhost:3100/index",
+                 method:"GET",
+                 params:{
+                     id:88
+                 }
+             }).then(res=>{
+                console.log(res.data)   
+                this.title = res.data.msg;
+             })
+          }
+        }).$mount("#app")
+    
+        
+      
+    </script>
+</body>
+</html>
+
+
+

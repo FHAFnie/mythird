@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title  >vue</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        .box{
+            position: absolute;
+            top:0;
+            left:100px;
+            width:100px;
+            height: 100px;
+            background: orange;
+        }
+        #drag2{
+            top:200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>{{title }}</h2>
+        <c-hot></c-hot>
+        <c-hot>
+           <div>
+                <p><a href="">这是你喜欢的看的小猪佩奇 我是 美英  </a></p>
+                your profile
+           </div>
+           <template slot="taobao">
+               <h4>淘宝 衣服 </h4>
+               <h4>淘宝 手机 </h4>
+               <h4>淘宝 零食 </h4>
+           </template>
+        </c-hot>
+
+
+    </div>
+    <!-- 
+      
+       slot 插槽内容   实现 内容分发 
+
+        <slot></slot>     接收 父组件 传入 内容片断  替换组件 slot 内的代码 
+
+        <slot name="taobao" > 具名插槽 </slot>
+
+        slot="taobao"
+     -->
+
+    <template id="hot">
+        <div style="border:2px solid red">
+            <h2> 这是 热点新闻 模块 </h2>
+            <h2>这里应该是 轮播图 </h2>
+            <slot>这里是父组件根据不同的人大数据挖掘出来不同的推荐文章 </slot>
+            <slot name="taobao"> <p>这是给你推荐希望你去购买的淘宝链接...</p> </slot>
+        </div>
+    </template>
+
+
+    <script>
+        Vue.component("c-hot",{
+            template:"#hot"
+        })
+        const vm = new Vue({
+          data:{   // data 属性 
+              title:" 组件 - component  slot 组件插槽     ",
+          },
+          components:{
+            
+          },
+          mounted(){
+              document.querySelector("title").innerHTML = this.title;
+
+          }
+        }).$mount("#app")
+    
+
+    </script>
+</body>
+</html>
+
+
+

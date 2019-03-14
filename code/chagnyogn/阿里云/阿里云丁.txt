@@ -1,0 +1,69 @@
+
+1.丁冠云 2  阿里云服务器 ECS 
+
+Centos 64位 7.4
+
+非常重要 
+用户名 root
+密码  Dgy931107
+
+
+aly 公网IP  47.96.178.137      接口  项目地址 
+    内网IP  172.16.206.163     起本地服务   localhost/主机IP
+
+远程连接密码  588246
+
+
+
+
+
+
+
+
+
+
+1.0
+如何从EPEL库安装Node.js
+
+另一个有效且简单的方法来安装Node.js就是从官方库。这同样确保您可以访问到EPEL库，
+你可以通过运行以下命令。
+
+sudo yum install epel-release
+
+现在可以使用yum命令安装Node.js了。
+
+sudo yum install nodejs
+
+因为在开发过程中我需要管理节点包，我还要安装新公共管理的软件包管理器，
+使用以下命令。
+
+sudo yum install npm
+
+whereis node 
+
+
+2.0 配置安全组
+
+
+
+负载均衡
+3.0 pm2  https://www.cnblogs.com/lxg0/p/7771229.html
+npm i pm2 -g 全局安装pm2
+
+pm2 start app.js  后台挂起服务
+pm2 list  查看后台挂起所有服务
+pm2 stop id  根据服务id 停止当前服务 
+pm2 delete id 根据服务 id 删除当前服务 
+pm2 restart id 重启服务 
+
+
+
+
+
+
+vue,电商pc,移动，后台系统
+
+
+
+
+

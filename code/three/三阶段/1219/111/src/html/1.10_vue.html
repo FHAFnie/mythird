@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title  >vue</title>
+    <script src="../js/vue.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>{{title }}</h2>
+        <p><input type="text" v-model="txt" ></p>
+        <h3>{{txt}}</h3>
+
+        <input type="checkbox" id="check" @change="getCheck" checked v-model="checked">
+        <label for="check">请同意我们的条款选项</label>
+        <h2>{{checked}}</h2>
+
+        <div id='example-3'>
+            <input type="checkbox" id="jack" value="篮球" v-model="checkedNames">
+            <label for="jack">Jack</label>
+            <input type="checkbox" id="john" value="足球" v-model="checkedNames">
+            <label for="john">John</label>
+            <input type="checkbox" id="mike" value="game" v-model="checkedNames">
+            <label for="mike">Mike</label>
+            <br>
+            <span>Checked names: {{ checkedNames }}</span>
+        </div>
+
+        <div>
+            <h4>性别</h4>
+            <input type="radio" id="man" v-model="picked" value="male">
+            <label for="man">男</label>
+            <input type="radio" id="woman" v-model="picked" value="female">
+            <label for="woman">女</label>
+            <h3>{{picked}}</h3>
+        </div>
+
+        <div>
+            <h3>选择你打算去工作的城市</h3>
+            <select v-model="selectCity"  >
+                <option value="">请选择城市</option>
+                <option v-for="(city,index) in cities" :key="index" :value="city.value">{{city.name}}</option>
+            </select>
+            <h2>{{selectCity}}</h2>
+        </div>
+
+        <div>
+            <h4>动态值绑定属性  v-bind </h4>
+
+            <input type="checkbox"
+            v-model="toggle"
+            v-bind:true-value = "a"
+            v-bind:false-value = "b"
+            >
+            你的回答是 
+            <h2>{{toggle}}</h2>
+
+
+            <div>
+                <input type="radio" :value="c" v-model="pick">猫
+                <input type="radio" :value="d" v-model="pick">狗
+                <input type="radio" :value="e" v-model="pick">猪
+                <h3>{{pick}}</h3>
+            </div>
+
+            <div>
+                <h2>我的购物车 </h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <td>序号</td>
+                            <td>选中</td>
+                            <td>名称</td>
+                            <td>图片</td>
+                            <td>价格</td>
+                            <td>数量</td>
+                            <td>小计</td>
+                            <td>操作</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(good,i) in goods" :key="i">
+                            <td>{{i+1}}</td>
+                            <td><input type="checkbox" v-model="good.check"></td>
+                            <td>{{good.title}}</td>
+                            <td><img src="http://placehold.it/50x50" alt=""></td>
+                            <td>{{good.price}}</td>
+                            <td> <button v-bind:disabled="good.count<=0" @click="good.count--">-</button><input disabled type="number" v-model="good.count"><button @click="good.count++">+</button></td>
+                            <td>{{good.price * good.count}}</td>
+                            <td><button @click="del(i)">删除</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><input type="checkbox" v-model="quan" >全选</p>
+                <button @click="quan=!quan"> {{quan?"反选":"全选"}} </button>
+                <h3>总计 : {{total }}  -  {{myTotal}} </h3>
+                <button>结算 </button> 
+                <button @click="delCheck">删除选中 </button>
+            </div>
+
+        </div>
+    </div>
+         <!-- 
+
+     -->
+    <script>
+
+        
+
+        const vm = new Vue({
+          data:{   // data 属性 
+              title:"v-model 表单输入  ",
+              txt:"hello ",
+              checked:false,
+              checkedNames:[],
+              picked:"male",
+              cities:[
+                {name:"北京",value:"BJ"},
+                {name:"上海",value:"SH"},
+                {name:"天津",value:"TJ"},
+                {name:"深圳",value:"SZ"},
+                {name:"成都",value:"CD"},
+                {name:"武汉",value:"WH"}
+            ],
+            selectCity:"",
+            toggle:'like',
+            a:'like',
+            b:'hate',
+            c:'cat',
+            d:"dog",
+            e:"pig",
+            pick:"pig",
+            goods:[
+                {check:false,title:"上衣",price:200,count:10},
+                {check:true,title:"裤子",price:100,count:10},
+                {check:false,title:"鞋子",price:500,count:10},
+                {check:false,title:"风衣",price:1000,count:10},
+                {check:true,title:"帽子",price:300,count:10},
+                {check:true,title:"西服",price:2000,count:10},
+            ],
+            myTotal:0
+            
+          },
+          computed:{
+              quan:{
+                get(){
+                    var flag =  true;
+                    this.goods.forEach((g,i)=>{
+                        if(!g.check){
+                            flag = false;
+                        }
+                    });
+
+                    return flag;
+                },
+                set(val){
+                    this.goods = this.goods.map((item,i)=>{
+                        item.check = val;
+                        return item;
+                    });
+                }
+              },
+              total:{
+                  get(){
+                      var count = 0;
+                      this.goods.forEach((item)=>{
+                          if(item.check){
+                              count += item.price* item.count;
+                          }
+                      })
+                      return count;
+                  },
+                  set(){
+
+                  }
+              }
+          },
+          watch:{
+            goods:{
+                handler(newVal){  // 深度监听 
+                    this.myTotal = 0;
+                    newVal.forEach((item)=>{
+                        if(item.check){
+                            this.myTotal += item.price* item.count;
+                        }
+                    })
+                    console.log(newVal);
+                },
+                deep:true
+            }
+          },
+
+          methods:{
+            getCheck(e){
+                console.log(e);
+                console.log(e.target.checked);
+            },
+            del(id){
+                // 修改  goods  
+                this.goods.splice(id,1);
+            },
+            delCheck(){
+                // 过滤 
+                this.goods = this.goods.filter(item=>!item.check);
+            }
+          },
+          mounted(){
+              document.querySelector("title").innerHTML = this.title;
+
+          }
+        }).$mount("#app")
+        
+
+    </script>
+</body>
+</html>
+
+
+
+<!-- 
+    深度监听   深拷贝  浅拷贝 
+
+    可变对象   array object   
+    修改可变对象  vue响应式系统无法检测到数据变化  
+
+    不可变对象   number boolean  string 
+    修改不可变对象  vue响应式系统实时 检测到数据变化 
+
+
+ -->

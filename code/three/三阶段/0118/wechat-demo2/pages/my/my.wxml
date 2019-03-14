@@ -1,0 +1,17 @@
+<!--pages/my/my.wxml-->
+<view>
+  <progress wx:if="{{!flag}}" percent="{{percent}}"  show-info color="red"  stroke-width="12"/>
+  <view wx:if="{{flag}}">
+    <swiper
+      indicator-dots="{{indicatorDots}}"
+      autoplay="{{autoplay}}"
+      interval="{{interval}}"
+      duration="{{duration}}"
+      class="swiper"
+    >
+        <swiper-item wx:for="{{imgUrls}}" wx:key="index" class="swiper-item">
+          <image class="img" src="{{item}}" ></image>
+        </swiper-item>
+    </swiper>
+  </view>
+</view>

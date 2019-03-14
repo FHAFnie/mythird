@@ -1,0 +1,90 @@
+<!--pages/home/home.wxml-->
+<view>
+    <text>pages/home/home.wxml</text>
+
+    <view bindtap="changeMsg">
+      {{msg}}
+    </view>
+  
+
+    <view   data-id="{{count}}" >
+      <view hidden="{{!flag}}" bindtap="add"> {{word}} -- {{count}} </view>
+      <switch checked="{{flag}}" bindchange="flagChange" ></switch>
+
+      <view> {{1000 + count}}</view>
+    </view>
+
+    <view>
+        <view wx:for="{{todos}}" wx:key="index" >
+           <view  >{{item.title}}--{{item.msg}}--{{index}}</view>
+        </view>
+    </view>
+
+    <view wx:if="{{false}}" wx:for="{{num}}" wx:for-item="i" wx:for-index="id" wx:key="id">
+        <view wx:for="{{num}}" wx:for-item="j" wx:for-index="idx" wx:key="idx">
+            <view wx:if="{{i<=j}}">
+                <view>
+                    {{i}}  * {{j}}  = {{i*j}}
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <block wx:if="{{true}}">
+      <view>view1</view>
+      <view>view2</view>
+    </block>
+
+    <view bindtap="parent">
+        <view id="tapTest" data-msg="hello" data-hi="WeChat" bindtap="tapName">Click me!</view>
+
+        <view bindtap="childOne">
+            冒泡事件：当一个组件上的事件被触发后，该事件会向父节点传递。
+            非冒泡事件：当一个组件上的事件被触发后，该事件不会向父节点传递。
+        </view>
+
+        <view catchtap="childTwo">
+          bind事件绑定不会阻止冒泡事件向上冒泡，catch事件绑定可以阻止冒泡事件向上冒泡
+        </view>
+    </view>
+    <template is="users" data="{{...usersInfo}}" />
+
+    <template name="users">
+        <view>
+           <block>
+              <view>用户-users</view>
+              <view>
+                username : {{username}}
+              </view>
+              <view>
+                password : {{password}}
+              </view>
+           </block>
+        </view>
+    </template> 
+
+    <import src="../../tpls/like.wxml" />
+    <template is="like" data="{{  username:'leson',count:100,word:'haha... ' }}" />
+
+
+     <import src="../../tpls/sign.wxml" />
+     <template is="sign" data="{{  ...modalData  }}" />
+
+
+      <import src="../../tpls/actionsheet.wxml" />
+      <template is="actionsheet" data="{{  ...actionsheetData  }}" />
+
+      <button type="warn" bindtap="open" >open </button>
+      <button type="primary" bindtap="showModal" >open modal</button>
+      <button type="primary" bindtap="showAction" >open actionsheet</button>
+
+      <view class="section">
+        rpx
+      </view>
+
+      <my-demo word="{{word}}" count="{{count}}" >
+          <view>
+              hello  daydayup - slot
+          </view>
+      </my-demo>
+</view>

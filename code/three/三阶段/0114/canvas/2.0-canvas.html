@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+    <style>
+        canvas{
+            border:1px solid #000;
+            margin:30px auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas width=800 height=400  id="mycanvas" class="mycanvas" name="mycanvas" >浏览器不支持 canvas 标签 </canvas>
+
+    <script>
+        var mycanvas = document.getElementById("mycanvas")
+        var c = mycanvas.getContext("2d");
+        
+        // rect(x,y,w,h)：x、y为起始坐标，w、h为矩形的宽、高   本意是 绘制  可以填充
+        
+        c.beginPath();
+        c.rect(50,50,200,200);
+        c.strokeStyle = "blue";
+        c.lineWidth = 4;
+        c.stroke();
+        c.fillStyle ="orange"
+        c.fill();  
+        c.closePath();
+
+        // fillRect(x,y,w,h) x、y为起始坐标，w、h为矩形的宽、高 只能 填充 不能绘制 
+        c.beginPath();
+        c.fillStyle ="green";
+        
+        c.fillRect(300,50,200,200);
+        c.closePath();
+
+        // arc(x,y,r,sa,es,true/false)
+        // x,y 圆心
+        // r 半径
+        // sa ea 起始角度
+        // true/false  逆时针 /  顺时针 
+        var P = Math.PI;
+        // c.beginPath();
+        // c.arc(400,200,180,0,P*2,true);
+        // c.fillStyle = "#123456";
+        // c.fill();
+        // c.closePath();
+
+
+        // c.beginPath();
+        // c.moveTo(400,200);
+        // c.arc(400,200,180,-P/4,P/4,false);
+        // c.fillStyle = "yellow";
+        // c.fill();
+        // c.closePath();
+
+        c.beginPath();
+        c.moveTo(400,200);
+        c.arc(400,200,180,-P/2,P/2,false);
+        c.lineTo(400,200);
+        c.fillStyle = "yellow";
+        c.lineWidth = 8;
+        c.stroke();
+        c.fill();
+        c.closePath();
+        
+
+
+
+
+
+        c.beginPath();
+        c.arc(600,200,150,0,P*2);
+        c.lineWidth = 20;
+        c.stroke()
+        c.closePath();
+
+
+
+
+        
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+

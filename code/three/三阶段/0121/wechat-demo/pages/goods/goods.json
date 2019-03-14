@@ -1,0 +1,8 @@
+{
+  "backgroundColor": "#666",
+  "navigationBarBackgroundColor": "#a375ce",
+  "navigationBarTitleText": "商品",
+    "usingComponents": {
+      "good-cpt": "../../components/good-cpt/good-cpt"
+    }
+}

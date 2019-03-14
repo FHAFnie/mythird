@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+    <style>
+        html,body{
+            width:100%;
+            height:100%;
+        }
+        canvas{
+           
+            border:1px solid #000;
+            margin:0 auto;
+            display: block;
+        }
+        h1{
+            width:100%;
+            height:60px;
+            line-height: 60px;
+            text-align: center;
+            background: -webkit-linear-gradient(left,red 20%,green 50%,blue 70%,yellow 100%);
+        }
+        *{
+            padding:0;
+            margin:0;
+        }
+        #box{
+            width:100%;
+            height: 400px;
+            background: orange;
+            color:#fff;
+            font-size: 80px;
+            text-align: center;
+            line-height: 400px;
+            position: relative;
+            overflow: hidden;
+            border:1px solid red;
+            box-sizing: border-box;
+        }
+        
+    </style>
+</head>
+<body>
+    <h1>八卦</h1>
+    <canvas width=1000 height=1000 id="mycanvas" class="mycanvas" name="mycanvas" >浏览器不支持 canvas 标签 </canvas> 
+  
+
+    <script>
+        var mycanvas = document.getElementById("mycanvas")
+        var c = mycanvas.getContext("2d");
+    
+        var P = Math.PI;
+
+        function FillArc(x,y,r,sa,ea,flag,color){
+            this.beginPath();
+            this.fillStyle = color;
+            this.arc(x,y,r,sa,ea,flag);
+            this.fill()
+            this.closePath();
+        }
+        function StrokeArc(x,y,r,sa,ea,flag,color,width){
+            this.beginPath();
+            this.strokeStyle = color;
+            this.lineWidth = width;
+            this.arc(x,y,r,sa,ea,flag);
+            this.stroke()
+            this.closePath();
+        }
+
+
+
+        c.beginPath();
+        c.save();
+        c.translate(500,500);
+
+        FillArc.call(c,0,0,120,-P/2,P/2,true,"#ccc");
+        FillArc.call(c,0,0,120,-P/2,P/2,false,"#000");
+        
+        FillArc.call(c,0,-60,60,0,P*2,false,"#000");
+        FillArc.call(c,0,60,60,0,P*2,false,"#ccc");
+
+        FillArc.call(c,0,-60,20,0,P*2,false,"#ccc");
+        FillArc.call(c,0,60,20,0,P*2,false,"#000");
+        
+        // 圈
+        //  后面 圈圈 的半径  = 上一个圈圈的 半径  + 两者线宽之和的一半 
+        StrokeArc.call(c,0,0,124,0,P*2,false,"#000", 10);
+        StrokeArc.call(c,0,0,149,0,P*2,false,"#ccc", 40);
+        StrokeArc.call(c,0,0,170,0,P*2,false,"#000", 2);
+        StrokeArc.call(c,0,0,180,0,P*2,false,"#fff", 18);
+        StrokeArc.call(c,0,0,190,0,P*2,false,"#000", 2);
+        StrokeArc.call(c,0,0,221,0,P*2,false,"orange", 60);
+        StrokeArc.call(c,0,0,252,0,P*2,false,"#000", 2);
+        StrokeArc.call(c,0,0,333,0,P*2,false,"#fff", 160);
+        StrokeArc.call(c,0,0,414,0,P*2,false,"#000", 2);
+        StrokeArc.call(c,0,0,422,0,P*2,false,"yellowgreen",14);
+        StrokeArc.call(c,0,0,430,0,P*2,false,"#000",2);
+
+
+        
+        // 绘制文字  
+        var txt = ['兑','乾','坎','艮','震','巽','离','坤'];
+        for(let i=0;i<txt.length;i++){
+            c.beginPath();
+            c.font = "40px 微软雅黑";
+            c.textBaseline = "middle";
+            c.textAlign = "center";
+            c.save();
+            c.rotate(P/4*i+P/2);
+            
+            // c.rotate(P/2);
+            // c.translate(220*Math.cos(P/4*i),220*Math.sin(P/4*i));
+            c.fillStyle = "#000";
+
+            if(i==1||i==2||i==3){
+                c.translate(0,-220);
+                c.rotate(P);
+                c.translate(0,220);
+            }
+            // c.fillText(txt[i],220*Math.cos(P/4*i),220*Math.sin(P/4*i));
+            c.fillText(txt[i],0,-220);
+            c.restore();
+            c.closePath();
+        }
+        
+
+        // 卦1 
+        c.beginPath();
+        c.save();
+        c.rotate(P/4*0);
+        c.lineWidth = 10;
+        c.moveTo(280,60);
+        c.lineTo(280,-60);
+        c.moveTo(310,60);
+        c.lineTo(310,-60);
+        c.moveTo(340,60);
+        c.lineTo(340,10);
+        c.moveTo(340,-60);
+        c.lineTo(340,-10);
+        c.strokeStyle ="#000";
+        c.stroke();
+        c.restore();
+        c.closePath();
+
+            // 卦2 
+        c.beginPath();
+        c.save();
+        c.rotate(P/4*1);
+        c.lineWidth = 10;
+        c.moveTo(280,60);
+        c.lineTo(280,-60);
+        c.moveTo(310,60);
+        c.lineTo(310,-60);
+        c.moveTo(340,60);
+        c.lineTo(340,-60);
+        c.strokeStyle ="#000";
+        c.stroke();
+        c.restore();
+        c.closePath();
+
+         // 卦3 
+        c.beginPath();
+        c.save();
+        c.lineWidth = 10;
+        c.rotate(P/4*2);
+        c.moveTo(280,60);
+        c.lineTo(280,10);
+        c.moveTo(280,-60);
+        c.lineTo(280,-10);
+        c.moveTo(310,60);
+        c.lineTo(310,-60);
+        c.moveTo(340,60);
+        c.lineTo(340,10);
+        c.moveTo(340,-10);
+        c.lineTo(340,-60);
+        c.stroke();
+        c.restore();
+        c.closePath();
+        
+
+
+
+
+        c.restore();    
+        c.closePath();
+    </script>
+</body>
+</html>
+
+
+
+
+
+

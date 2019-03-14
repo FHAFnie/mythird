@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h3>{{title}}</h3>
+        <h3>{{a}} -- {{b}}</h3>
+
+    </div>
+
+    <!-- 
+
+        实例生命周期钩子  
+        每个 Vue 实例在被创建时都要经过一系列的初始化过程——例如，
+        需要设置数据监听、编译模板、将实例挂载到 DOM 并在数据变化时更新 DOM 等
+
+        生命周期  组件从 初始化到 销毁过程 成为 组件生命 周期  
+
+        生命周期钩子函数  作用 给 用户在不同的阶段添加 自己代码 / 业务逻辑的 机会 
+
+        四个阶段 
+        created 组件创建阶段
+        mounted 组件载入阶段
+        updated 组件数据修改阶段  
+        destoryed  组件销毁  
+
+
+     -->
+
+    <script>
+        const data = {
+            a:2018,
+            b:1807,
+            title:"vue 实例"
+        }
+        const vm = new Vue({
+            // el:"#app",
+           data,
+           methods:{
+               log(msg){
+                   console.log(msg);
+               }
+           },
+           beforeCreate(){
+               console.log(this);  // 没有 指向 vm 实例  vm 实例还未创建 
+               console.log(this.a);
+               console.log(this.log);
+               console.log("vm 实例创建之前 beforeCreate")
+           },
+           created(){
+                console.log(this);
+                console.log(this.a);
+                console.log(this.log);
+              this.log("vm 实例创建成功 created")
+           },
+           beforeMount(){
+                 this.log("vm 实例载入页面之前 beforeMount")
+           },
+           mounted(){
+                this.log("vm 实例载入页面成功 mounted")
+           },
+           beforeUpdate(){
+           
+                this.log("vm 实例 data  发生 改变 之前 beforeUpdate")
+               
+           },
+           updated(){
+              
+                this.log("vm 实例 data  发生 改变  updated")
+           },
+           beforeDestroy() {
+                this.log("vm 实例 被销毁之前   beforeDestroy")
+           },
+           destroyed() {
+                this.log("vm 实例 被销毁之前   destroyed")
+           },
+        }).$mount("#app")
+        console.log(vm.a);
+        console.log(data.b);
+        data.b = 1000;
+
+        vm.a = 2019;
+        
+        // Vue 实例还暴露了一些有用的实例属性与方法。它们都有前缀 $，以便与用户定义的属性区分开来
+        console.log(vm.$data);
+        console.log(vm.$el);
+
+
+
+    </script>
+</body>
+</html>

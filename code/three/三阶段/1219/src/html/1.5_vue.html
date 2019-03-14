@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title  >vue</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h2>{{title }}</h2>
+        <h3>{{txt}}</h3>
+        <h3>翻转  txt :  {{txt.split("").reverse().join("")}}</h3>
+        <h4>方法 翻转 : {{ reverseTxt() }} </h4>
+        <h4>computed msg {{msg}}</h4>
+
+        <div>
+            <h4>计算属性 computed </h4>
+            <input type="text" v-model="inp">
+            <h2>{{inp}}</h2>
+            <h2>computed  {{reverseInp}}</h2>
+            <h3>methods {{ reInp() }}</h3>
+        </div>
+
+        <div>
+            <h4>侦听属性  watch </h4>
+            <input type="text" placeholder="firstName" v-model="firstName">
+            <br>
+            <input type="text" placeholder="lastName" v-model="lastName">
+            <h2>{{fullName}}</h2>
+            <h2>{{fName}}</h2>
+            <h2>{{fuName}}</h2>
+        </div>
+        <div>
+            <b>smallNum==={{smallNum}}</b>
+            <p>bigNum == {{bigNum}}</p>
+
+            <button @click="smallNum=200">修改smallNum = 200</button>
+            <button @click="bigNum=500">修改bigNum == 500  </button>
+        </div>
+
+        <div>
+            <h3>搜索水果 </h3>
+            <input type="text" v-model="fruit">
+
+            <div>
+                <p v-for="(f) in searchFruits">{{f}}</p>
+            </div>
+        </div>
+        
+    </div>
+    <!-- 
+        计算属性  computed   处理复杂的逻辑  依赖 data 某个数值 
+        计算属性  有缓存 的  基于 依赖进行缓存  如果计算数学 依赖的值没有发生改变 , 计算属性不好重新计算 求值
+
+        watch 侦听属性  监听data 某个数值 返回newVal 从而去改变对应的值 
+     -->
+    <script>
+
+        const vm = new Vue({
+          data:{   // data 属性 
+              title:"计算属性和侦听器 ",
+              txt:"1807 best wish for you",
+              inp:"1807 ",
+              firstName:"Stevens",
+              lastName:"Jobs",
+              fullName:"",
+              smallNum:50,
+              fruit:"",
+              fruits:['apple','pear','lemon','banana','orange','watermelon','Mango'],
+              newFruits:[]
+          },
+          computed:{   // 计算属性 
+            msg:function(){
+                return this.txt.split("").reverse().join("")
+            },
+            reverseInp(){
+                return this.inp.split("").reverse().join("") +"- " +new Date().getSeconds();
+            },
+            fName(){
+                 return this.firstName + "==" + this.lastName;
+            },
+            fuName:{
+                // getter 取值  
+                get(){
+                    return this.firstName + "+" + this.lastName;
+                },
+                // setter 设置 监听作用  
+                // 只有计算属性的值 自己发生改变   才能触发set 监听方法 
+                set(newVal){
+                    console.log(newVal);
+                    var names = newVal.split("+");
+                    this.firstName = names[0];
+                    this.lastName = names[1];
+                }
+            },
+            bigNum:{
+                // 取值 
+                get(){
+                    return this.smallNum + 300;
+                },
+                // 监听 主动修改 bigNum 才能进来
+                set(newVal){
+                    this.smallNum = newVal;
+                }
+            },
+            searchFruits:{
+                get(){
+                    var arr = [];
+                    arr = this.fruits.filter(fruit=>fruit.indexOf(this.fruit)!==-1);
+                    return arr;
+                },
+                set(){
+
+                }
+            }
+          },
+          methods:{
+             reverseTxt(){
+               return this.txt.split("").reverse().join("") 
+             },
+             reInp(){
+                return this.inp.split("").reverse().join("")+"= " +new Date().getSeconds();
+             },
+             
+          },
+          watch:{
+              firstName(newVal,oldVal){
+                //   console.log(newVal);
+                  this.fullName = newVal + "-" + this.lastName
+              },
+              lastName(newVal,oldVal){
+                  this.fullName = this.firstName + "-" + newVal;
+              },
+              fruit(newVal){
+                  
+                  this.newFruits = this.fruits.filter(fruit=>fruit.indexOf(newVal)!==-1);
+                  
+              }
+          },
+          created(){
+            this.fullName = this.firstName + "-" + this.lastName;
+          },
+          mounted(){
+              document.querySelector("title").innerHTML = this.title;
+
+          }
+        }).$mount("#app")
+
+
+
+    </script>
+</body>
+</html>

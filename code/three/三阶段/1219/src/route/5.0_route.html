@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue-router</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+    <script src="../js/axios.js"></script>
+    <style>
+        .views{
+            border:2px solid red;
+        }
+        /* .router-link-active {
+            color:red;
+            background: darkgoldenrod;
+        } */
+        .router-link-exact-active{
+            color:red;
+            background: darkgoldenrod;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+       <h3>{{msg}}</h3>
+       <hr>
+       <!-- 5 路由出口-->
+       <router-view class="views"></router-view>
+    </div>
+
+
+
+<!--
+        路由 vue-router
+        构建单页面应用
+        路由 是用来实现单页面应用的  SPA  single page appliaction
+
+        某个路由池 注册对应的 路由选项(path,component) url匹配到不同的路由 path 加载对应的路由  component  和 相关数据
+        组件 (components) 映射到路由 (routes)，然后告诉 Vue Router 在哪里渲染它们
+
+        router-link-active , .router-link-exact-active 实现路由高亮
+
+        vue-router 默认 hash 模式 —— 使用 URL 的 hash 来模拟一个完整的 URL
+        于是当 URL 改变时，页面不会重新加载
+
+        mode:"hash"     url hash 来切换  #
+        mode:"history"  要想刷新 配置服务器   html5 History API
+     -->
+     <template id="layout">
+         <div style="border:2px solid darkblue">
+            <div>
+                <router-view style="border:2px solid yellowgreen"></router-view>
+            </div>
+            <div>
+                <footer>
+                    <router-link v-for="(foot,i) in foots"
+                        :key="i"
+
+                        :to="{name:foot.name,path:foot.path}"
+                    >{{foot.txt}}</router-link>
+                </footer>
+            </div>
+         </div>
+     </template>
+
+     <template id="find">
+         <div>
+             <h3>find - find 电影的美 </h3>
+             <div>
+                 <p v-for="(m,i) in mv">
+                     <router-link :to="{name:'detail',params:{title:m.title,id:m.id},query:{year:m.year}}" >
+                        {{m.title}}--{{m.year}}
+                    </router-link>
+                 </p>
+             </div>
+         </div>
+     </template>
+
+     <template id="detail">
+         <div>
+             <h3>电影详情 --- {{$route.params.title }}</h3>
+             <h3>电影id --- {{$route.params.id }}</h3>
+             <h3>电影 year  --- {{$route.query.year }}</h3>
+             <button @click="">返回</button>
+         </div>
+     </template>
+
+    <script>
+        // 0
+        // 1. 定义路由组件
+        const Layout =  {
+            template:'#layout',
+            data(){
+                return {
+                    foots:[
+                        {txt:"微信",path:'/app/wechat',name:'wechat',icon:""},
+                        {txt:"通讯录",path:'/app/contact',name:'contact',icon:""},
+                        {txt:"发现",path:'/app/find',name:'find',icon:""},
+                        {txt:"我",path:'/app/my',name:'my',icon:""},
+                    ]
+                }
+            }
+        }
+
+        const Wechat = {template:`<h2>wechat...</h2>`}
+        const Contacts = {template:`<h2>Contacts...</h2>`}
+        const Find = {
+            template:"#find",
+            data(){
+                return {
+                    mv:[]
+                }
+            },
+            methods:{
+
+            },
+            mounted(){
+                axios.get("http://localhost:3100/vue/movie",{
+                    params:{
+                        limit:10
+                    }
+                }).then(res=>{
+                    this.mv = res.data.result
+                })
+            }
+        }
+        const My = {template:`<h2>my...</h2>`}
+        const MvDetail = {template:"#detail"}
+
+
+        // 2. 定义routes 路由配置
+        const routes = [
+            {
+                path:"",
+                redirect:{name:'wechat'}
+            },
+            {
+                path:"/app",
+                name:"layout",
+                component:Layout,
+                children:[
+                    {path:"",redirect:{name:'wechat'}},
+                    {path:"wechat",name:'wechat',component:Wechat},
+                    {path:"contact",name:'contact',component:Contacts},
+                    {path:"find",name:'find',component:Find},
+                    {path:"my",name:'my',component:My},
+                ]
+            },
+            {
+                path:'/movie/detail/:title/:id',
+                name:'detail',
+                component:MvDetail
+            },
+            {
+                path:"*",
+                redirect:{name:'wechat'}
+            }
+        ]
+
+        // 3. 创建路由对象  配置 routes
+        const router = new VueRouter({
+            routes,
+            mode:"hash" ,    // history 正常URL 无法刷新  如何去#  切换路由模式
+            base:"/"  // 上线需要设置
+        })
+
+        // 4. 挂载
+        var vm = new Vue({
+            el:"#app",
+            router,
+            data:{
+                msg:"vue -router 微信路由 WeChat"
+            }
+        })
+
+
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue-router</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+    <style>
+        .views{
+            border:2px solid red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+       <h3>{{msg}}</h3>
+        <!-- 6 页面导航  -->
+       <router-link to="/home"> 首页 </router-link>
+       <router-link to="/user/zuozuomu/post/9999?id=1807&word=datydayup#level3"> 用户 佐佐木 </router-link>
+       <router-link to="/user/leson/post/8888?id=1810&word=twotwo#level2"> 用户 leson </router-link>
+       <router-link to="/find/message"> find </router-link>
+       <router-link to="/about"> 我about </router-link>
+       <hr>
+
+       <!-- 5 定义路由出口   -->
+       <router-view class="views"></router-view>
+    </div>
+    <template id="user">
+        <div>
+            <h2>user-user-user</h2>
+            <h2>{{$route.params}}</h2>
+            <h2>username : {{$route.params.username }}</h2>
+            <h2>uid : {{$route.params.uid }}</h2>
+            <h2>path : {{$route.path }}</h2>
+            <h2>fullPath : {{$route.fullPath }}</h2>
+            <h2>query =  {{$route.query}}</h2>
+            <h2>hash {{$route.hash}}</h2>
+        </div>
+    </template>
+    <!--
+        路由 vue-router
+        构建单页面应用
+        路由 是用来实现单页面应用的  SPA  single page appliaction
+
+        某个路由池 注册对应的 路由选项(path,component) url匹配到不同的路由 path 加载对应的路由  component  和 相关数据
+        组件 (components) 映射到路由 (routes)，然后告诉 Vue Router 在哪里渲染它们
+
+        动态路由匹配   : 声明  params
+        path----不带？拼接的参数
+        /user/:id      /user/liang   /user/ming   {id:liang}
+        /user/:username   /user/leson  /user/hong  {username:leson}
+        /user/:username/post/:post_id  /user/leson/post/0007  {username:leson,post_id:0007}
+        fullPath:------带？拼接的参数
+
+
+        $route  路由对象属性
+
+        $route.params 获取 :  参数   object
+        一个 key/value 对象，包含了动态片段和全匹配片段，如果没有路由参数，就是一个空对象。
+
+        $route.path
+        类型: string
+        字符串，对应当前路由的路径，总是解析为绝对路径，如 "/foo/bar"。
+
+        $route.query  ? 拼接的参数
+        一个 key/value 对象，表示 URL 查询参数。例如，对于路径 /foo?user=1，
+        则有 $route.query.user == 1，如果没有查询参数，则是个空对象
+
+        $route.hash
+        当前路由的 hash 值 (带 #) ，如果没有 hash 值，则为空字符串。
+
+        $route.fullPath
+        完成解析后的 URL，包含查询参数和 hash 的完整路径。
+
+        $route.name
+        路由 name
+
+
+        路由匹配优先级
+        同一个路径可以匹配多个路由，此时，匹配的优先级就按照路由的定义顺序：
+        谁先定义的，谁的优先级就最高
+
+        动态路由匹配 书写在后面
+        /user/message  /user/message
+        /user/:msg
+
+     -->
+    <script>
+        // 0
+        // 1. 定义路由组件
+        const Home = {template:"<h2>this is my home page ! </h2>"}
+        const User = {
+            template:"#user",
+            updated(){
+                console.log(this.$route);
+            },
+            watch:{
+                '$route'(to,from){
+                    console.log(to);
+                    console.log(from);
+                }
+            }
+         }
+        const My = {template:"<h2>this is My pretty page ! </h2>"}
+        const Find = {template:"<h2>find---find {{$route.params.txt || '不存在' }} </h2>"}
+
+        // 2. 定义routes 路由配置
+        const routes = [
+            {path:"/",component:Home},
+            {path:"/home",component:Home},
+            {path:"/user/:username/post/:uid?",component:User},
+            {path:"/find/:txt",component:Find},
+            {path:"/find/message",component:Find},
+
+            {path:"/about",component:My},
+            {path:"*",component:Home}
+        ]
+
+        // 3. 创建路由对象  配置 routes
+        const router = new VueRouter({
+            routes
+        })
+
+        // 4. 挂载
+        var vm = new Vue({
+            el:"#app",
+            router,
+            data:{
+                msg:"vue -router 动态路由匹配 路由参数匹配"
+            }
+        })
+
+
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,8 @@
+div {
+  width: 100%;
+  height: 200px; }
+  div p {
+    text-align: center;
+    line-height: 200px;
+    color: red;
+    font-size: 100px; }

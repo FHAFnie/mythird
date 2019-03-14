@@ -1,0 +1,14 @@
+
+
+<template name="actionsheet">
+  <view>
+      <action-sheet
+        hidden="{{actionsheetHidden}}"
+      >
+        <action-sheet-item data-item="{{item}}" bindtap="itemTap" wx:for="{{items}}" wx:key="index">
+            {{item}}
+        </action-sheet-item>
+        <action-sheet-cancel bindtap="actionsheetcancel">取消</ action-sheet-cancel>
+      </action-sheet>
+  </view>
+</template> 

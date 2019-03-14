@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title  >vue</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h2>{{title }}</h2>
+        <h3>{{txt}}</h3>
+        <h3>翻转  txt :  {{txt.split("").reverse().join("")}}</h3>
+        <h4>方法 翻转 : {{ reverseTxt() }} </h4>
+        <h4>computed msg {{msg}}</h4>
+
+        
+    </div>
+
+
+    <!-- 
+
+     -->
+    <script>
+
+        const vm = new Vue({
+          data:{   // data 属性 
+              title:"计算属性和侦听器 ",
+              txt:"1807 best wish for you"
+          },
+          computed:{   // 计算属性 
+            msg:function(){
+                return this.txt.split("").reverse().join("")
+            }
+          },
+          methods:{
+             reverseTxt(){
+               return this.txt.split("").reverse().join("")
+             }
+          },
+          mounted(){
+              document.querySelector("title").innerHTML = this.title;
+          }
+        }).$mount("#app")
+
+
+
+    </script>
+</body>
+</html>

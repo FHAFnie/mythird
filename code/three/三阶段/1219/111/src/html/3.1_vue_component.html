@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title  >vue</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        .box{
+            position: absolute;
+            top:0;
+            left:100px;
+            width:100px;
+            height: 100px;
+            background: orange;
+        }
+        #drag2{
+            top:200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>{{title }}</h2>
+        <my-cpt></my-cpt>
+        <c-head></c-head>
+        <c-content></c-content>
+        <c-nav></c-nav>
+        <c-menu></c-menu>
+        <c-list></c-list>
+
+    </div>
+
+    <!-- 
+        全局创建组件  Vue.component
+        局部创建组件  { components :{ }}
+
+        组件 特点  小巧独立 可复用 
+
+        扩展HTML代码  封装可复用的代码 
+     -->
+    <script>
+        Vue.component("myCpt",{
+            template:`<h2>this a my first vue component </h2>`
+        })
+        
+        const head = '<h2>head - head -head component </h2>';
+
+        Vue.component("cHead",{
+            template:head
+        });
+
+        var content = {
+            template:"<div>this is content component </div>",
+            methods:{
+
+            },
+            watch:{
+
+            }
+        }
+        Vue.component('cContent',content)
+        
+        // 创建或者合并对象 
+        var nav =  Vue.extend({
+            template:"<nav>nav nav component</nav>",
+            methods:{}
+        });
+
+        Vue.component("c-nav",nav)
+        
+        const list = {
+            template:"<h2>list - list </h2>"
+        }
+       
+
+        const vm = new Vue({
+          data:{   // data 属性 
+              title:" 组件 - component  ",
+     
+          },
+          components:{
+            cMenu:{
+                template:"<h2>menu - menu </h2>"
+            },
+            cList:list
+          },
+          mounted(){
+              document.querySelector("title").innerHTML = this.title;
+
+          }
+        }).$mount("#app")
+    
+
+    </script>
+</body>
+</html>
+
+
+

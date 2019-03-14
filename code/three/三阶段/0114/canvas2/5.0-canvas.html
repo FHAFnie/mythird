@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+    <style>
+        canvas{
+            border:1px solid #000;
+            margin:30px auto;
+            display: block;
+        }
+        h1{
+            width:100%;
+            height:60px;
+            line-height: 60px;
+            text-align: center;
+            background: -webkit-linear-gradient(left,red 20%,green 50%,blue 70%,yellow 100%);
+        }
+    </style>
+</head>
+<body>
+    <h1>wuhan1807 daydayup</h1>
+    <canvas width=800 height=400  id="mycanvas" class="mycanvas" name="mycanvas" >浏览器不支持 canvas 标签 </canvas>
+    <canvas width=800 height=400  id="mycanvas1" class="mycanvas" name="mycanvas" >浏览器不支持 canvas 标签 </canvas>
+
+    <script>
+        var mycanvas = document.getElementById("mycanvas")
+        var c = mycanvas.getContext("2d");
+        
+        // 线性渐变
+        // var  lg= context.createLinearGradient(xStart,yStart,xEnd,yEnd)
+        // xstart:渐变开始点x坐标 
+        // ystart:渐变开始点y坐标
+        // xEnd:渐变结束点x坐标 
+        // yEnd:渐变结束点y坐标
+        // lg.addColorStop(offset,color)     {0% red,20%green}
+        // offset:设定的颜色离渐变结束点的偏移量(0~1) 
+        // color:绘制时要使用的颜色
+
+
+        var lg = c.createLinearGradient(0,0,800,0);
+        lg.addColorStop(.2,'pink');
+        lg.addColorStop(.4,'purple');
+        lg.addColorStop(.6,'#123456');
+        lg.addColorStop(.8,'yellowgreen');
+        lg.addColorStop(1,'orange');
+
+
+        // c.beginPath();
+        // c.fillStyle = lg;
+        // c.fillRect(0,0,800,400);
+        // c.closePath();
+
+        // clearRect(0,0,mycanvas.width,mycanvas.height); 清除画布 
+        function FillRect(x,y,w,h,color){
+            this.beginPath();
+            // this.clearRect(0,0,mycanvas.width,mycanvas.height);
+            this.fillStyle = color;
+            this.fillRect(x,y,w,h);
+            this.closePath();
+        }
+        function FillArc(x,y,r,color){
+            this.beginPath();
+            this.clearRect(0,0,mycanvas.width,mycanvas.height);
+            this.fillStyle = color;
+            this.arc(x,y,r,0,Math.PI*2);
+            this.fill();
+            this.closePath();
+        }
+
+        function FillDots(x,y,color){
+            // this.beginPath();
+            this.strokeStyle = color;
+            this.lineTo(x,y);
+            this.stroke();
+            // this.closePath();
+        }
+
+
+
+        // FillRect.call(c,0,100,50,50,lg);
+        
+
+
+        var t = 0;
+        setInterval(()=>{
+            t+=4;
+            // FillRect.call(c,t,400,50,50,lg);
+        },100)
+
+        // 触壁反弹
+        var speedX = 5;
+        var speedY = 4;
+
+        var x = 50;
+        var y = 50;
+        var r = 30
+        setInterval(()=>{
+            x+=speedX;
+            y+=speedY;
+
+            if(x>mycanvas.width-r||x<r){
+                speedX *=-1;
+            }
+            
+            if(y>mycanvas.height -r || y < r){
+                speedY *=-1;
+            }
+            // FillArc.apply(c,[x,y,r,lg])
+            // FillDots.call(c,x,y,lg);
+        },1);
+        
+        // 绘制柱形图  
+
+        var gap = 10;
+        var width = 40;
+        var count = Math.floor( mycanvas.width / (gap+width));
+        for(let i =0;i<count;i++){
+            var randomHeight = 100 + Math.round(Math.random()*(mycanvas.height-100))
+            fillZhu((gap+width)*i,400,width,randomHeight,lg);
+            FillDots.call(c,(gap+width)*i+width/2,mycanvas.height-randomHeight,lg);
+        }
+        var t = 0; 
+        function fillZhu(x,y,w,h,lg){
+           var timer = setInterval(()=>{
+               t-=4;
+               if(t>-h){
+                FillRect.call(c,x,y,w,t,lg);
+                
+               }else{
+               
+                   clearInterval(timer);
+               }
+           },50)
+           
+        }
+
+        
+ 
+
+
+
+
+
+
+        // var rg=context.createRadialGradient(xStart,yStart,radiusStart,xEnd,yEnd,radiusEnd)	
+        // xStart:发散开始圆心x坐标	
+        // yStart:发散开始圆心y坐标	
+        // radiusStart:发散开始圆的半径	
+        // xEnd:发散结束圆心的x坐标	
+        // yEnd:发散结束圆心的y坐标	
+        // radiusEnd:发散结束圆的半径	
+
+
+        var mycanvas1 = document.getElementById("mycanvas1");
+        
+        var ctx = mycanvas1.getContext("2d");
+        var rg = ctx.createRadialGradient(400,200,100,400,200,200);   
+        
+        rg.addColorStop(.2,'pink');
+        rg.addColorStop(.4,'purple');
+        rg.addColorStop(.6,'#123456');
+        rg.addColorStop(.8,'yellowgreen');
+        rg.addColorStop(1,'orange');
+
+
+        ctx.beginPath();
+        ctx.fillStyle = rg;
+        ctx.fillRect(0,0,mycanvas1.width,mycanvas1.height);
+        ctx.closePath();
+        
+
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+

@@ -1,0 +1,13 @@
+/* components/good-cpt/good-cpt.wxss */
+
+
+.goods-box{
+    width:100%;
+    height:100%;
+}
+
+.scroll{
+  width:100%;
+  height:100%;
+  overflow: auto;
+}

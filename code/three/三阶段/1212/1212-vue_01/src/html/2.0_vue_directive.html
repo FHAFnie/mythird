@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title  >vue</title>
+    <script src="../js/vue.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>{{title }}</h2>
+        <input type="text" v-focus >
+        <h2 v-red >指令是把字体颜色改为红色 </h2>
+        <p v-my-like > my-like something</p>
+        <p v-demo:click.enter.13 = "like" > demo - demo - demo  </p>
+        <p v-my-func:click.enter ="func" >func --  func - -- func </p>
+        <h3 v-myshow="!!0">自定义 v-show 指令 </h3>
+    </div>
+    <!-- 
+        v-if
+        v-show 
+        v-on
+        v-bind
+        v-once
+        v-for
+        v-html
+
+        代码复用和抽象的主要形式是组件
+        自定义指令   操作底层DOM 元素
+
+        focus 
+
+        v-focus  调用指令 v-focus 指令名  focus
+
+        指令名 myLike 调用 v-my-like 遵循 驼峰命名 
+
+        钩子函数
+        bind
+        inserted   插入到父节点 
+        update
+        unbind 
+
+        bindings 绑定的数据 
+        expression   表达式   like 
+        name     指令名  demo 
+        value    实际值  
+        modifiers   包含修饰符的对象
+        arg   参数  click 
+
+     -->
+    <script>
+
+        Vue.directive("focus",{
+            inserted(el){
+                console.log(el);
+                el.focus();
+            }
+        })
+
+        Vue.directive("red",{
+            inserted(el){
+                el.style.color = 'red'
+            }
+        })
+        
+
+        const vm = new Vue({
+          data:{   // data 属性 
+              title:"自定义指令  directive v-  ",
+              like:'1807 daydayup'
+          },
+          methods:{
+              func(){
+                  alert("重写 v-on 指令 ")
+              }
+          },
+          directives:{
+              myLike:{
+                bind(el){
+
+                },
+                inserted(el){
+                    console.log("my-like")
+                }  
+              },
+              demo:{
+                  bind(el,bindings){
+                       console.log(bindings)
+                       el.innerHTML += bindings.value
+                  },
+                  inserted(el){
+
+                  },
+                  update(el){
+
+                  },
+                  unbind(el){
+
+                  }
+              },
+              myFunc:{
+                  bind(el,bindings){
+                    console.log(bindings);
+                    el.addEventListener(bindings.arg,bindings.value);
+
+                    // 绑定  enter 键盘事件 
+                  },
+                  inserted(el,bindings){
+                  
+                  }
+              },
+              myshow:{
+                  bind(el,bindings){
+                      el.style.display =  bindings.value ? "block":"none"
+                  }
+              }
+          },
+
+          mounted(){
+              document.querySelector("title").innerHTML = this.title;
+
+          }
+        }).$mount("#app")
+    
+        // 指令 编写动画  
+
+    </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title  >vue</title>
+    <script src="../js/vue.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>{{title }}</h2>
+        <h2 v-on:click="count++">count == {{count }}</h2>
+        <div v-on:mousemove="change">mousemove</div>
+        <div @touchstart="change">touchstart</div>
+
+        <input type="text" @input="input" placeholder="input">
+        <input type="text" @change="input" placeholder="change">
+
+        <input type="text" @blur="send('hello 1807')" placeholder="blur">
+
+        <input type="text" @keyup.enter = "count++">
+        <input type="text" @keyup.space = "count++">
+
+        <div @click.prevent.once="parent" style="border:2px solid red">
+            parent
+            <div @click.stop="child" style="border:2px solid blue">child</div>
+        </div>
+
+        <div>
+            <h3>{{word}}</h3>
+            <h3>{{word  | upper  }}</h3>
+            <h3 v-bind:data-msg="word | lower">{{word  | lower  }}</h3>
+            <h3>{{number  | fix(5)  }}</h3>
+            <h3>{{number  | currency('$',4)  }}</h3>
+            <h4>{{time  | date("/") }}</h4>
+            <h3>{{ n  | toStr(2) }}</h3>
+            <h3>{{ n  | toStr(8) }}</h3>
+            <h3>{{ n  | toStr(16) }}</h3>
+        </div>
+    </div>
+         <!-- 
+        vue  v-on:click  @click 
+        input 
+        change
+        click
+        dbclick
+        keyup
+        keydown
+        keypress
+        mousemove
+        mousedown
+        mouseup
+        touchstart
+        touchmove
+        touchend
+
+        原生绑定事件 
+        onclick="do()"
+        document.getElementyById("box").onclick = fn;
+        addEventListener("click",fn,false/true)  true 冒泡 false 捕获 
+        removeEventListener("click")
+
+        jquery 绑定事件 
+        on  /  off
+        bind  /  unbind
+        click()
+
+        事件委托===> 基于事件冒泡的原理 把子元素的触发 父元素代替子元素执行 
+        $(parent).on('click',child,fn);    
+        $(parent).delegate(child,'click',fn);
+
+    
+
+        事件修饰符
+        .stop
+        .prevent
+        .capture
+        .self
+        .once
+
+        按键修饰符
+        enter
+        .tab
+        .delete (捕获“删除”和“退格”键)
+        .esc
+        .space
+        .up
+        .down
+        .left
+        .right
+        
+
+        Vue.js 允许你自定义过滤器，可被用于一些常见的文本格式化。过滤器可以用在两个地方：
+        双花括号插值和 v-bind 表达式 (后者从 2.1.0+ 开始支持)。
+        过滤器应该被添加在 JavaScript 表达式的尾部，由“管道”符号指示： | 
+        
+        文本格式化 
+
+        | 管道符  声明这是过滤器 
+
+        pipe 管道符 过滤器 
+
+        必须要有返回值 
+
+        255       10  
+
+        255 / 10   =  25   - 5
+        25/ 10     =  2    - 5
+        2 / 10     =  0    - 2
+
+        255 / 8    = 31   -  7
+        31 /8  =   3-    7
+        3 / 8  = 0  - 3
+
+
+        255/ 16 = 15 - 15   ff 
+     -->
+    <script>
+        // 全局注册过滤器
+        Vue.filter("upper",(value)=>{
+            // value 需要过滤的值 
+            if(!value){
+                return value;
+            }
+            return value.toUpperCase();
+        });
+
+        Vue.filter("lower",(value)=>{
+            if(!value){
+                return value;
+            }
+            return value.toLowerCase();
+        })
+        
+
+        const vm = new Vue({
+          data:{   // data 属性 
+              title:"v-on 事件绑定 ",
+              count:2018,
+              word:"Wh1807 DayDayUp",
+              number:1807,
+              time:new Date(),
+              n:255
+          },
+          filters:{   // 局部注册过滤器 
+              fix(value,num){
+                if(!value){
+                    return value;
+                }
+                num = num || 2;
+                return value.toFixed(num);
+              },
+              currency(value,type,n){
+                if(!value){
+                    return value;
+                }
+                type = type || "¥";
+                n = n || 2;
+                value = value.toFixed(n);
+                return type + value;
+              },
+              date(value,str){
+                if(!value){
+                    return value;
+                }
+                var time = new Date(value);
+                var year = time.getFullYear();
+                var month = time.getMonth() + 1;
+                var day = time.getDate();
+                var hour = time.getHours();
+                var minutes = time.getMinutes();
+                var seconde = time.getSeconds();
+                str = str || "-";
+                return `${year}${str}${month}${str}${day} ${hour}:${minutes}:${seconde}`;
+              },
+              tel(value,str){
+
+              },
+              toStr(value,n){
+                  if(!value){
+                      return value;
+                  }
+                  n  = n || 10;
+                  return value.toString(n)
+              }
+          },    
+          methods:{
+            change(){
+                this.count +=10;
+            },
+            input(e){
+                console.log(e);
+            },
+            send(msg){
+                alert(msg)
+            },
+            parent(){
+                console.log("I am parent")
+            },
+            child(){
+                console.log("I am child")
+            }
+          },
+          mounted(){
+              document.querySelector("title").innerHTML = this.title;
+
+          }
+        }).$mount("#app")
+        
+
+    </script>
+</body>
+</html>

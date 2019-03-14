@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>touch</title>
+    <style>
+        *{
+            padding: 0;
+            margin:0;
+        }
+       #app{
+           width:200px;
+           height:200px;
+           background: orange;
+       }
+
+       .box{
+           width:94%;
+           height:70vh;
+           background: darkorchid;
+           margin:200px auto 0;
+           text-align: center;
+
+       }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <div class="box" id="box">
+
+    </div>
+    <!-- 
+        touchstart
+        touchmove
+        touchend   
+        touches     相关手势信息    当前手势集合信息 
+        changedTouches   已经结束的上一个手势集合信息 
+     -->
+    <script>
+        console.log(document.documentElement.clientWidth)
+        
+
+        var box = document.getElementById("box");
+        var startY = 0;
+        var endY = 0;
+        box.addEventListener("touchstart",(e)=>{
+            console.log(e);
+            var e =   e || window.e;
+            var touches = e.touches[0];  // 第一个 手势 
+            box.innerHTML =  "clientX : " + touches.clientX + "<br>" +
+                                "clientY : " + touches.clientY + "<br>"+
+                                "pageX : " + touches.pageX + "<br>"+
+                                "pageY : " + touches.pageY + "<br>"+
+                                "screenX : " + touches.screenX + "<br>"+
+                                "screenY : " + touches.screenY + "<br>"
+            startY = touches.clientY;
+
+        },false)   // false  冒泡 默认  true 捕获
+
+        
+        box.addEventListener("touchmove",(e)=>{
+            console.log("滑动move");
+            var e =   e || window.e;
+            var touches = e.touches[0]
+            box.innerHTML =  "clientX : " + touches.clientX + "<br>" +
+                                "clientY : " + touches.clientY + "<br>"+
+                                "pageX : " + touches.pageX + "<br>"+
+                                "pageY : " + touches.pageY + "<br>"+
+                                "screenX : " + touches.screenX + "<br>"+
+                                "screenY : " + touches.screenY + "<br>"
+            endY = touches.clientY
+           
+        },false)
+
+        // touchend 手势离开屏幕  没有touches 对象  有  changedTouches
+        box.addEventListener("touchend",(e)=>{
+            console.log("滑动 end ");
+            console.log(e.changedTouches);
+            if(endY>startY){
+                box.innerHTML = "向 下滑动  down"
+            }else{
+                box.innerHTML = "向 上 滑动  up"
+            }
+
+        },false)
+
+    </script>
+</body>
+</html>

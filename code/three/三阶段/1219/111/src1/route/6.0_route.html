@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue-router</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+    <script src="../js/axios.js"></script>
+    <style>
+        .views{
+            border:2px solid red;
+        }
+        /* .router-link-active {
+            color:red;
+            background: darkgoldenrod;
+        } */
+        .router-link-exact-active{
+            color:red;
+            background: darkgoldenrod;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+       <h3>{{msg}}</h3>
+       <hr>
+       <router-link :to="{name:'home',params:{bannerId:1234,pageId:6666}}">首页</router-link>
+       <router-link :to="{name:'news',params:{bannerId:3333,pageId:7777}}">新闻</router-link>
+       <!-- 5 路由出口 命名视图 -->
+        <router-view style="border:2px solid yellow"  name="banner" ></router-view>
+        <router-view style="border:2px solid blue"  name="page" ></router-view>
+       <router-view class="views"></router-view>
+    </div>
+<!--
+        路由 vue-router
+        构建单页面应用
+        路由 是用来实现单页面应用的  SPA  single page appliaction
+
+        某个路由池 注册对应的 路由选项(path,component) url匹配到不同的路由 path 加载对应的路由  component  和 相关数据
+        组件 (components) 映射到路由 (routes)，然后告诉 Vue Router 在哪里渲染它们
+
+        vue-router 提供的导航守卫主要用来通过跳转或取消的方式守卫导航
+
+        导航守卫
+        路由切换
+        路由进入之前
+        路由更新之前
+        路由离开之前
+
+        守卫三类
+        1. 全局守卫  router.beforeEach 属于路由对象 独享的守卫 属于 router对象
+
+        2.  路由独享的守卫  属于某个路由选项  routes    beforeEnter
+
+        3.  组件内的守卫
+        beforeRouteEnter
+        beforeRouteUpdate
+        beforeRouteLeave
+     -->
+    <template id="home">
+        <div>
+           <h2> 这是 home 主页  首页视图 --- {{$route.params.bannerId}} </h2>
+
+        </div>
+    </template>
+
+    <template id="news">
+        <div>
+            <h2> 这是 news   新闻 视图----  {{$route.params.bannerId}} </h2>
+        </div>
+    </template>
+
+    <template id="banner">
+        <div>
+            <h3>这是 轮播图 组件  banner {{$route.params.bannerId}}  </h3>
+        </div>
+    </template>
+
+    <template id="page">
+        <div>
+            <h3>这是 当前 广告推送 内容视图   {{$route.params.pageId}}</h3>
+        </div>
+    </template>
+
+    <script>
+        // 0
+        // 1. 定义路由组件
+        const Home = {
+            template:"#home"
+        }
+        const News = {
+            template:"#news",
+            beforeRouteEnter (to, from, next) {
+                // 在渲染该组件的对应路由被 confirm 前调用
+                // 不！能！获取组件实例 `this`
+                // 因为当守卫执行前，组件实例还没被创建
+                // ajax 请求
+                next();
+            },
+            beforeRouteUpdate (to, from, next) {
+                // 在当前路由改变，但是该组件被复用时调用
+                // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
+                // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
+                // 可以访问组件实例 `this`
+                next();
+            },
+            beforeRouteLeave (to, from, next) {
+                // 导航离开该组件的对应路由时调用
+                // 可以访问组件实例 `this`
+                window.confirm("你确定离开我们吗?user-user-user")
+                next();
+            }
+        }
+        const Banner = {template:"#banner"}
+        const Page = {template:"#page"}
+
+        // 2. 定义routes 路由配置
+        const routes = [
+            {
+                path:"",
+                redirect:{name:'home'}
+            },
+            {
+                path:"/home/:bannerId/:pageId",
+                name:'home',
+                components:{
+                    default:Home,
+                    banner:Banner,
+                    page:Page
+                },
+                beforeEnter(to,from,next){
+                    console.log("这是 home 路由独享的守卫 ")
+                    console.log(to);
+                    alert("你尚未登陆,请登陆");
+                    next();
+                }
+            },
+            {
+                path:"/news/:bannerId/:pageId",
+                name:'news',
+                components:{
+                    default:News,
+                    banner:Banner,
+                    page:Page
+                }
+            },
+            {
+                path:"*",
+                redirect:{name:'home'}
+            }
+        ]
+
+        // 3. 创建路由对象  配置 routes
+        const router = new VueRouter({
+            routes,
+            mode:"hash" ,    // history 正常URL 无法刷新  如何去#  切换路由模式
+            base:"/"  // 上线需要设置
+        })
+        // 全局守卫
+        router.beforeEach((to,from,next)=>{
+            console.log("全局路由守卫")
+            next();   // 下一步路由操作
+        })
+
+        router.afterEach((to, from) => {
+
+        })
+        // 4. 挂载
+        var vm = new Vue({
+            el:"#app",
+            router,
+            data:{
+                msg:"vue -router 命名视图 "
+            },
+            watch:{
+                '$route'(to,from){
+                    // 参数或查询的改变并不会触发进入/离开的导航守卫
+                    console.log(to);
+                    console.log(from)
+                }
+            }
+        })
+
+
+    </script>
+</body>
+</html>
+

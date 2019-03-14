@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title  >vue</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        .box{
+            position: absolute;
+            top:0;
+            left:100px;
+            width:100px;
+            height: 100px;
+            background: orange;
+        }
+        #drag2{
+            top:200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>{{title }}</h2>
+        <c-head></c-head>
+        <button-counter></button-counter>
+        <button-counter></button-counter>
+        <button-counter></button-counter>
+
+    </div>
+
+    <!-- 
+
+        组件是可复用的 Vue 实例
+        data 属性  
+        组件里面的  data 属性 是一个函数  必须有return  而且必须返回 对象 
+
+
+     -->
+    <script>
+        const head = {
+            template:`<h2 @click='changeColor'  :style='{color:color}'  >I am header , click me will change color -- {{msg}} </h2>`,
+            data(){
+                return {
+                    color:"yellow",
+                    msg:"head -1807 "
+                }
+            },
+            methods:{
+                changeColor(){
+                    this.color = 'blue';
+                }
+            }
+        }
+        Vue.component("c-head",head);
+
+
+        const vm = new Vue({
+          data:{   // data 属性 
+              title:" 组件 - component  2.0  ",
+     
+          },
+          components:{
+              'button-counter':{
+                  template:`<button @click="add" >{{ count }}</button>`,
+                  data(){
+                      return {
+                          count:0
+                      }
+                  },
+                  methods:{
+                      add(){
+                          this.count += 1;
+                      }
+                  }
+              }
+          },
+          mounted(){
+              document.querySelector("title").innerHTML = this.title;
+
+          }
+        }).$mount("#app")
+    
+
+    </script>
+</body>
+</html>
+
+
+

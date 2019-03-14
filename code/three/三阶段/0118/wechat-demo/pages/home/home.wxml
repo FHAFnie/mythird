@@ -1,0 +1,33 @@
+<!--pages/home/home.wxml-->
+<view>
+    <text>pages/home/home.wxml</text>
+
+    <view bindtap="changeMsg">
+      {{msg}}
+    </view>
+  
+
+    <view   data-id="{{count}}" >
+      <view hidden="{{!flag}}" bindtap="add"> {{word}} -- {{count}} </view>
+      <switch checked="{{flag}}" bindchange="flagChange" ></switch>
+
+      <view> {{1000 + count}}</view>
+    </view>
+
+    <view>
+        <view wx:for="{{todos}}" wx:key="index" >
+           <view  >{{item.title}}--{{item.msg}}--{{index}}</view>
+        </view>
+    </view>
+
+    <view wx:for="{{num}}" wx:for-item="i" wx:for-index="id" wx:key="id">
+        <view wx:for="{{num}}" wx:for-item="j" wx:for-index="idx" wx:key="idx">
+            <view wx:if="{{i<=j}}">
+                <view>
+                    {{i}}  * {{j}}  = {{i*j}}
+                </view>
+            </view>
+        </view>
+    </view>
+
+</view>

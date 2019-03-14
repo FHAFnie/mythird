@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="/bootstrap/js/jquery-1.10.1.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <title>电影评论</title>
+    <style>
+        .box{
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+        <%-  include("head",{index:5}) %>
+
+        <div class="container container-fluid ">
+            <div class="row box">
+                <div class="col-md-6 col-sm-6 col-lg-6">
+                    <h3 class="caption text-info">电影介绍</h3>
+                    <div class="thumbnail">
+                            <img style="width:100%" src="<%- movie.images&&movie.images.large %>" alt="">
+                            <div class="caption">
+                                <h4 class="text-info pull-right"><%- movie.year %></h4>
+                                <h4><a href="/comment/index?mid=<%- movie.id %>" ><%- movie.title %></a></h4>
+                                <p class="text-danger">评分 : <%- movie.rating.average %></p>
+                                <p class="text-success">电影分类 : <%- movie.genres %></p>
+                                <p class="text-warning">导演 : <%- movie.directors[0].name %></p>
+                                <p class="text-primary">主演 : <%- movie.casts[0].name %></p>
+                            </div>
+                        </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-lg-6">
+                    <h3 class="caption text-success">电影所有评论</h3>
+                    <div class="well">
+                        <%    comments.forEach((comment,index)=>{  %>
+                                <div class="row" >
+                                    <hr>
+                                    <div class="col-md-12 col-lg-12 col-sm-12">
+                                            <span class=" text-success">评论用户:  <%-  comment.username  %></span>
+                                            <span class="pull-right text-primary">评论时间:  <%-  comment.time  %></span>
+                                            <hr>
+                                            <p class="text-info h5">
+                                                标题 :  <%- comment.title  %>
+                                            </p>
+                                            <p class="text-danger h3">
+                                                内容 :  <%- comment.content  %>
+                                            </p>
+                                    </div>
+                                </div>
+                        <%    })    %>
+                        </div>
+                    <button class="btn btn-primary" onclick="window.history.go(-1)">返回</button>
+                </div>
+            </div>
+        </div>
+        <%- include footer %>
+    
+</body>
+</html>

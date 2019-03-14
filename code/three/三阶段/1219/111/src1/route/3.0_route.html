@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue-router</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-router.js"></script>
+    <style>
+        .views{
+            border:2px solid red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+       <h3>{{msg}}</h3>
+       <hr>
+       <!-- 5 路由出口-->
+       <router-view class="views"></router-view>
+    </div>
+
+    <template id="list">
+        <div>
+            <h3>list - list -list</h3>
+            <h2>name  {{$route.name }}</h2>
+            <div>
+                <p v-for="(word,index) in words" :key="index">
+                    <router-link v-bind:to="{name:'detail',params:{title:word,id:index},query:{name:'zkl',time:'520'},hash:'#1807'}">
+                        {{word}}--{{index}}
+                    </router-link>
+                </p>
+            </div>
+        </div>
+    </template>
+    <template id="detail">
+        <div>
+            <h2>detail - detail </h2>
+            <h2>title {{$route.params.title}}</h2>
+            <h2>id {{$route.params.id}}</h2>
+            <h2>name {{$route.query.name}}</h2>
+            <h2>time {{$route.query.time}}</h2>
+            <h2>hash {{$route.hash}}</h2>
+            <button @click="gotoList">跳转 list </button>
+            <button @click="goback">返回</button>
+        </div>
+    </template>
+<!-- 
+        路由 vue-router 
+        构建单页面应用  
+        路由 是用来实现单页面应用的  SPA  single page appliaction 
+
+        某个路由池 注册对应的 路由选项(path,component) url匹配到不同的路由 path 加载对应的路由  component  和 相关数据 
+        组件 (components) 映射到路由 (routes)，然后告诉 Vue Router 在哪里渲染它们 
+
+        命名路由 
+        创建 Router 实例的时候，在 routes 配置中给某个路由设置名称  $route.name
+
+        声明式  <router-link :to="...">	    声明式的导航  === HTML router-link
+        编程式  router.push(...)   编程式的导航  === func 函数
+
+        // 字符串
+        router.push('home')
+
+        // 对象
+        router.push({ path: 'home' })
+
+        // 命名的路由
+        router.push({ name: 'user', params: { userId: 123 }})
+
+        // 带查询参数，变成 /register?plan=private
+        router.push({ path: 'register', query: { plan: 'private' }})
+
+        v-bind:to=`/detail/${w}/${index}`
+        
+        路由重定向  
+        www.baidu.com/node  ==>    www.baidu.com/vue 
+       
+         {path:"*",redirect:"/home"} 路由重定向 
+
+         路由添加 name 属性  这就是 命名路由  
+     -->
+    <script>
+        // 0
+        // 1. 定义路由组件
+        const list = Vue.extend({
+            template:"#list",
+            data(){
+                return {
+                    words:["天道酬勤","知足常乐","兢兢业业","昏昏欲睡"]
+                }
+            }
+        })
+        const Detail = Vue.extend({
+            template:"#detail",
+            methods:{
+                gotoList(){
+                    // router.push("/list")
+                    // router.push({path:"/list"})
+                    // router.push({name:'list'})
+                    // router.push({name:'list',query:{username:'leson'}})
+                    console.log(this.$router);
+                   this.$router.push({name:'list',query:{username:'leson'}})
+                },
+                goback(){
+                    // router.go(-1);
+                    // this.$router.back();
+                    // window.history.go(-1);
+                    window.history.back();
+                }
+            }
+
+            
+        })
+        // 2. 定义routes 路由配置 
+        const routes = [
+            {
+                path:"/list",
+                component:list,
+                name:"list"
+            },
+            {
+                path:"/detail/:title/:id",
+                component:Detail,
+                name:"detail"
+            },
+            // {
+            //     path:"*",
+            //     component:list
+            // },
+            {
+                path:"*",
+                redirect:'/list'
+            },
+            {
+                path:"*",
+                redirect:{name:'list'}
+            }
+        ]
+
+        // 3. 创建路由对象  配置 routes
+        const router = new VueRouter({
+            routes
+        })
+
+        // 4. 挂载 
+        var vm = new Vue({
+            el:"#app",
+            router,
+            data:{
+                msg:"vue -router 命名路由 函数跳转 "
+            }
+        })
+
+
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title  >vue</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        .box{
+            position: absolute;
+            top:0;
+            left:100px;
+            width:100px;
+            height: 100px;
+            background: orange;
+        }
+        #drag2{
+            top:200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>{{title }}</h2>
+        <select v-model="currentCpt">
+            <option value="tableCpt">表格</option>
+            <option value="listCpt">列表</option>
+        </select>
+        <keep-alive>   
+            <transition name="fade">
+                <component v-bind:is="currentCpt" :cars="cars"></component>
+            </transition>
+        </keep-alive>
+    </div>
+    <!-- 
+      
+         动态切换组件  
+         component      is 属性  
+         keep-alive 缓存处理 
+     -->
+     <template id="table">
+        <table>
+            <thead>
+                <tr>
+                    <td>序号</td>
+                    <td>品牌</td>
+                    <td>型号</td>
+                    <td>颜色</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(car ,key,index) in cars" :key="index">
+                    <td>{{index+1}}</td>
+                    <td>{{car.brand}}</td>
+                    <td>{{car.model}}</td>
+                    <td>{{car.color}}</td>
+                </tr>
+            </tbody>
+        </table>
+     </template>
+
+     <template id="list">
+        <ul>
+            <li v-for="(car ,key,index) in cars" :key="index">
+                <p>序号 : {{index+1}}</p>
+                <p>品牌 : {{car.brand}}</p>
+                <p>型号 : {{car.model}}</p>
+                <p>颜色 : {{car.color}}</p>
+            </li>
+        </ul>
+    </template>
+    
+    <script>
+        Vue.component("tableCpt",{
+            template:"#table",
+            props:{
+                cars:Object
+            }
+        })
+        Vue.component("listCpt",{
+            template:"#list",
+            props:{
+                cars:Object
+            }
+        })
+        var cars = {
+            car01 : {brand : "Ford", model : "Mustang", color : "red"},
+            car02 : {brand : "Fiat", model : "500", color : "white"},
+            car03 : {brand : "Volvo", model : "XC90", color : "black"}
+        }
+        const vm = new Vue({
+          data:{   // data 属性 
+              title:" 组件 - component  动态切换组件     ",
+              cars,
+              currentCpt:'tableCpt'
+          },
+          components:{
+            
+          },
+          mounted(){
+              document.querySelector("title").innerHTML = this.title;
+
+          }
+        }).$mount("#app")
+    
+
+    </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title  >vue</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h3>{{title}}</h3>
+        <h4 v-once>{{txt}}</h4>
+        <div v-html="tag"></div>
+        <img v-bind:src="src" alt="" width=200 height=200 />
+        <p><a :href="url" v-bind:data-id="id"  >热烈来到千锋学院 </a></p>
+
+        <h2>{{ count + 1 }} </h2>
+        <h2>{{!!0 ? true:false }}</h2>
+        <h2>{{ url.split("").reverse().join("") }}</h2>
+
+        <div v-if="seen">
+            你是否看的见,你是我的眼 
+        </div>
+
+        <button @click="add">count ++ </button>
+        <input type="text" @keyup.enter.prevent="add" value="点击我count++">
+        <input type="text" @keypress.13="add" value="点击我count++">
+    </div>
+
+
+    <!-- 
+        {{ }} 模板语法  双大括号语法 插值表达式  Mustache
+        v-once 只允许插入一次   不能再被修改  const 
+        v-html 输出html 标签元素  
+        v-bind  : 绑定属性 attr  
+        v-on 绑定事件  @ 缩写 
+
+        指令 (Directives) 是带有 v- 前缀的特殊特性 单个 JavaScript 表达式  
+        作用  操作底层DOM 
+        
+     -->
+    <script>
+
+        const vm = new Vue({
+          data:{
+              title:"模板语法 && 指令 ",
+              txt:"v-once 只会编译一次 ",
+              tag:"<h3>1807 daydayup</h3>",
+              src:"http://47.94.208.182/base/img/3.jpg",
+              url:"http://www.mobiletrain.org/",
+              id:"0007",
+              count:2018,
+              seen:true
+
+          },
+          methods:{
+              add(){
+                  this.count++;
+              }
+          },
+          mounted(){
+              document.querySelector("title").innerHTML = this.title;
+          }
+        }).$mount("#app")
+
+
+
+    </script>
+</body>
+</html>
